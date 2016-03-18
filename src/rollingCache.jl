@@ -53,14 +53,15 @@ function clear!(rc::RollingCache)
   rc.value_to_key = Hash{Any, AbstractString}()
 end
 
-function next_key(i)
-  hi = i / CACHE_CODE_DIGITS;
-  lo = i % CACHE_CODE_DIGITS;
-  ch = Char(lo+FIRST_ORD)
-  if hi == 0
-    "^$ch"
-  else
-    ch1 = Char(hi+FIRST_ORD)
-    "^$ch1$ch"
+function next_key(i::Integer)
+  let hi = div(i, CACHE_CODE_DIGITS),
+      lo = i % CACHE_CODE_DIGITS,
+      ch = Char(lo+FIRST_ORD)
+    if hi == 0
+      "^$ch"
+    else
+      ch1 = Char(hi+FIRST_ORD)
+      "^$ch1$ch"
+    end
   end
 end
