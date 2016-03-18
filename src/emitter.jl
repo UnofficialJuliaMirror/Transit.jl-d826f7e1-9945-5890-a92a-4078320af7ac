@@ -1,11 +1,7 @@
-module Transit
-  import JSON
+type JsonEmitter
+  io::IO
+end
 
-  type JsonEmitter
-    io::IO
-  end
+function emit(e::JsonEmitter, s::AbstractString)
 
-  function emit(e::JsonEmitter, s AbstractString)
-	
-  end
 end
