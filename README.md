@@ -1,5 +1,7 @@
 # transit-julia
 
+Note that transit-julia is still under active development and is *not* ready for use.
+
 Transit is a data format and a set of libraries for conveying values between applications written in different languages. This library provides support for marshalling Transit data to/from [Julia](http://julialang.org).
 
 * [Rationale](http://blog.cognitect.com/blog/2014/7/22/transit)
