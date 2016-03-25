@@ -1,8 +1,11 @@
-module Transit
   import JSON
 
   type Emitter
     io::IO
+  end
+
+  function emitRaw(e::Emitter, s::AbstractString)
+    print(e.io, s)
   end
 
   function emit(e::Emitter, s::AbstractString)
@@ -13,26 +16,22 @@ module Transit
     JSON.print(e.io, i)
   end
 
+  # TBD: Can this just be emit(e, v::Void)
+  # That is, are there any other instances of Void besides nothing?
   function emitNull(e::Emitter)
     JSON.print(e.io, nothing)
   end
 
   function emitArrayStart(e::Emitter)
-    println(e.io, "[")
+    print(e.io, "[")
   end
 
   function emitArrayEnd(e::Emitter)
     println(e.io, "]")
   end
 
-  function emitArraySep(e::Emitter)
-    println(e.io, ", ")
+  function emitArraySep(e::Emitter, i=2)
+    if i != 1
+      print(e.io, ", ")
+    end
   end
-
-  function emitArrayElement(e::Emitter, el::Any, i::Integer=1)
-	if index != 1
-		emitArraySep(e)
-	end
-	emit(el)
-  end
-end

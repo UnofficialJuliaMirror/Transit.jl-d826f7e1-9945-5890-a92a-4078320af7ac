@@ -40,10 +40,6 @@ function iscachekey(str::AbstractString)
   str[0] == SUB && str != MAP_AS_ARRAY
 end
 
-function startswith(str::AbstractString, pat::AbstractString)
-  start(search(str, pat)) == 1
-end
-
 function iscacheable(str::AbstractString, key=false)
   str.size >= MIN_SIZE_CACHEABLE && (key || startswith("~#","~\$","~\:"))
 end

@@ -1,19 +1,21 @@
-module Transit
-  function encode(e::Emitter, s::AbstractString)
-    println("string: ", s)
-  end
+type Encoder
+  encoderFunctions
+  encodesToString
+  emitter::Emitter
 
-  function encode(e::Emitter, i::Integer)
-    println("number:", i)
-  end
+  Encoder(io) = new(Dict{DataType,Function}(), Dict{DataType,Bool}(), Emitter(io))
+end
 
-  function encode(e::Emitter, i::Rational)
-    println("rational:", i)
-  end
+function add_encoder(e::Encoder, t::DataType, f::Function, encodes_to_string::Bool)
+  e.encoderFunctions[t] = f
+  e.encodesToString[t] = encodes_to_string
+end
 
-  function encode(e::Emitter, a::Array)
-    println("array:  ", a)
-    println("array:  ", a[1])
+function encode(e::Encoder, x::Any, as_key::Bool)
+  if haskey(e.encoderFunctions, typeof(x))
+    e.encoderFunctions[typeof(x)](e, x, as_key)
+  else
+    encodeValue(e, x, as_key)
   end
 end
 
