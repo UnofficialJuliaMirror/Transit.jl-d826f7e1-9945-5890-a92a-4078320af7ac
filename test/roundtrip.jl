@@ -11,7 +11,9 @@ function round_trip(inval)
 end
 
 
-
 @test round_trip([1, 2, 3, 4]) == [1, 2, 3, 4]
+@test round_trip(["some", "funny", "words"]) == ["some", "funny", "words"]
+@test round_trip([1, "and", 2, "we", Dict{Any,Any}("mix"=>"it up")]) == 
+                 [1, "and", 2, "we", Dict{Any,Any}("mix"=>"it up")]
 @test round_trip(Dict{Any,Any}("a" => 1, "b" => 2)) == Dict{Any,Any}("a" => 1, "b" => 2)
 @test round_trip(Dict{Any,Any}("a" => 1)) == Dict{Any,Any}("a" => 1)
