@@ -1,5 +1,11 @@
-function startswith(str::AbstractString, pat::AbstractString)
-  start(search(str, pat)) == 1
+function startswith(str::AbstractString, pats...)
+  for pat in pats
+      println("pat: ", pat)
+      if start(search(str, pat)) != 1
+        return false
+      end
+  end
+  true
 end
 
 function constantly(value)

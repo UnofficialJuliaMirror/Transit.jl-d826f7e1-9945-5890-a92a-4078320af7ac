@@ -1,4 +1,14 @@
-type RollingCache
+abstract Cache
+
+type NoopCache <: Cache
+end
+
+function write!(rc::NoopCache, name::AbstractString)
+    name
+end
+
+
+type RollingCache <: Cache
   keyToValue::Dict{ASCIIString,Any}
   ValueToKey::Dict{Any,ASCIIString}
 end
@@ -41,7 +51,7 @@ function iscachekey(str::AbstractString)
 end
 
 function iscacheable(str::AbstractString, key=false)
-  str.size >= MIN_SIZE_CACHEABLE && (key || startswith("~#","~\$","~\:"))
+  length(str) >= MIN_SIZE_CACHEABLE && (key || startswith(str, "~#","~\$","~\:"))
 end
 
 function clear!(rc::RollingCache)

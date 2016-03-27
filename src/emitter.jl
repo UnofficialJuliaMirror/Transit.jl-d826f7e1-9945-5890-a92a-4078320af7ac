@@ -2,6 +2,13 @@
 
   type Emitter
     io::IO
+    cache::Cache
+  end
+
+  function make_emitter(io, verbose::Bool)
+    let cache = verbose ? RollingCache() : NoopCache()
+      Emitter(io, cache)
+    end
   end
 
   function emit_raw(e::Emitter, s::AbstractString)
@@ -9,10 +16,13 @@
   end
 
   function emit_tag(e::Emitter, x::AbstractString)
-    emit(e, "~$x")
+    emit(e, "~$x", true)
   end
 
-  function emit(e::Emitter, x::AbstractString)
+  function emit(e::Emitter, x::AbstractString, cacheable::Bool)
+    if iscacheable(x, cacheable)
+      x = write!(e.cache, x)
+    end
     print(e.io, JSON.json(x))
   end
 
@@ -20,8 +30,8 @@
     print(e.io, JSON.json(x))
   end
 
-  function emit_null(e::Emitter)
-    print(e.io, "null ")
+  function emit_null(e::Emitter, askey::Bool)
+    askey ? emit_tag(e, "_") : emit_raw(e, "null")
   end
 
   function emit_array_start(e::Emitter)

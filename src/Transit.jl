@@ -10,10 +10,10 @@ module Transit
   include("tsymbol.jl")
   include("link.jl")
   include("constants.jl")
+  include("cache.jl")
   include("decoder.jl")
   include("utilities.jl")
   include("emitter.jl")
   include("encoder.jl")
   include("reader.jl")
-  include("rollingCache.jl")
 end
