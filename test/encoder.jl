@@ -20,8 +20,10 @@ module TestEncoder
     @test square_trip(1.0) == 1.0
     @test square_trip("hello") == "hello"
     @test square_trip("~hello") == "~~hello"
-    @test square_trip([1,2,3]) == [1,2,3]
     @test square_trip(true) == "~?t"
     @test square_trip(false) == "~?f"
-    @test square_trip(2//3) == Any["ratio", Any[2, 3]]
+    @test square_trip(2//3) == Any["~ratio", Any[2, 3]]
+    @test square_trip([1,2,3]) == [1,2,3]
+    @test square_trip((1,2,"hello")) == Any["~list", Any[1,2,"hello"]]
+    #@test square_trip(Set([1,2,3])) == Any["~set", Any[1,2,3]]
 end
