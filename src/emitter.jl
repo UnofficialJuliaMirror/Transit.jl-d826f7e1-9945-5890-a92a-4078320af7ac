@@ -8,18 +8,20 @@
     print(e.io, s)
   end
 
-  function emit(e::Emitter, s::AbstractString)
-    JSON.print(e.io, s)
+  function emit_tag(e::Emitter, x::AbstractString)
+    emit(e, "~$x")
   end
 
-  function emit(e::Emitter, i::Integer)
-    JSON.print(e.io, i)
+  function emit(e::Emitter, x::AbstractString)
+    print(e.io, JSON.json(x))
   end
 
-  # TBD: Can this just be emit(e, v::Void)
-  # That is, are there any other instances of Void besides nothing?
+  function emit(e::Emitter, x::Integer)
+    print(e.io, JSON.json(x))
+  end
+
   function emit_null(e::Emitter)
-    JSON.print(e.io, nothing)
+    print(e.io, "null ")
   end
 
   function emit_array_start(e::Emitter)
@@ -27,7 +29,7 @@
   end
 
   function emit_array_end(e::Emitter)
-    println(e.io, "]")
+    print(e.io, "] ")
   end
 
   function emit_array_sep(e::Emitter, i=2)
