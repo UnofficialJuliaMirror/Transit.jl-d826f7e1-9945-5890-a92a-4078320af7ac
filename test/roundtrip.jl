@@ -13,3 +13,5 @@ end
 
 
 @test round_trip([1, 2, 3, 4]) == [1, 2, 3, 4]
+@test round_trip(Dict{Any,Any}("a" => 1, "b" => 2)) == Dict{Any,Any}("a" => 1, "b" => 2)
+@test round_trip(Dict{Any,Any}("a" => 1)) == Dict{Any,Any}("a" => 1)

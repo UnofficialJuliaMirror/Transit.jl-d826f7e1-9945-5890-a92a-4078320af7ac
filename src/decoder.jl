@@ -41,7 +41,7 @@ function decode_value(e::Decoder, node::Array{Any,1}, cache, as_map_key=false)
       return returned_dict
     else
       decoded = decode_value(e, node[1], cache, as_map_key)
-      if typeof(decoded) == Tag
+      if isa(decoded, Tag)
         return decode_value(e, decoded, node[2], cache, as_map_key)
       end
     end
@@ -51,7 +51,33 @@ function decode_value(e::Decoder, node::Array{Any,1}, cache, as_map_key=false)
 end
 
 
-function decode_value(e::Decoder, node::OrderedDict)
+function decode_value(e::Decoder, hash::OrderedDict, cache, as_map_key=false)
+  if length(hash) != 1
+    h = Dict{Any,Any}()
+    for kv in hash
+      key = decode_value(e, kv[1], cache, true)
+      val = decode_value(e, kv[2], cache, false)
+      h[key] = val
+    end
+    return h
+  else
+    for (k,v) in hash
+      key = decode_value(e, k, cache, true)
+      if isa(key, Tag)
+        return decode_value(e, decoded, value, cache, as_map_key)
+      end
+      return Dict{Any,Any}(key => decode_value(e, v, cache, false))
+    end
+  end
+end
+
+function decode_value(e::Decoder, s::AbstractString, cache, as_map_key=false)
+  # handle if cache key?
+  # cache if cacheable
+  if s[1] == ESC
+    ## handle decoders cases
+  end
+  s
 end
 
 function decode_value(e::Decoder, tag::Tag, value, cache, as_map_key=false)
