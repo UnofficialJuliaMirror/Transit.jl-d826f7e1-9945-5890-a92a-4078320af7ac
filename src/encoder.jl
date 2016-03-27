@@ -29,10 +29,6 @@ function encodes_to_string(e::Encoder, x::Any)
     end
 end
 
-function encodes_to_string(e::Encoder, x::Any)
-    true
-end
-
 function encode_value(e::Encoder, s::AbstractString, as_key::Bool)
     startswith(s, "~") ? emit(e.emitter, "~$s") : emit(e.emitter, s)
 end
@@ -42,7 +38,6 @@ function encode_value(e::Encoder, s::Symbol, as_key::Bool)
 end
 
 function encode_value(e::Encoder, ts::TSymbol, as_key::Bool)
-
     emit(e.emitter, "~\$$(ts.s)")
 end
 
@@ -114,6 +109,7 @@ function encode_value(e::Encoder, x::AbstractFloat, as_key::Bool)
          end
     end
 end
+
 function encode_iterator(e::Encoder, iter)
     for (i, x) in iter
         emit_array_sep(e.emitter, i)
@@ -138,8 +134,16 @@ function encode_value(e::Encoder, a::AbstractArray, as_key::Bool)
     emit_array_end(e.emitter)
 end
 
+function encodes_to_string(e::Encoder, x::AbstractArray)
+    false
+end
+
 function encode_value(e::Encoder, r::Rational, as_key::Bool)
     encode_tagged_enumerable(e, "ratio", enumerate([num(r), den(r)]))
+end
+
+function encodes_to_string(e::Encoder, x::Rational)
+    false
 end
 
 function encode_value(e::Encoder, x::DateTime, as_key::Bool)
@@ -156,8 +160,16 @@ function encode_value(e::Encoder, x::Tuple, as_key::Bool)
     encode_tagged_enumerable(e, "list", enumerate(x))
 end
 
+function encodes_to_string(e::Encoder, x::Tuple)
+    false
+end
+
 function encode_value(e::Encoder, x::Set, as_key::Bool)
     encode_tagged_enumerable(e, "set", enumerate(x))
+end
+
+function encodes_to_string(e::Encoder, x::Set)
+    false
 end
 
 function encode_value(e::Encoder, x::Link, as_key::Bool)
@@ -166,6 +178,71 @@ function encode_value(e::Encoder, x::Link, as_key::Bool)
     end
 end
 
+function encodes_to_string(e::Encoder, x::Link)
+    false
+end
+
+function encode_value(e::Encoder, x::TaggedValue, as_key::Bool)
+    emit_array_start(e.emitter)
+    emit_tag(e.emitter, x.tag)
+    emit_array_sep(e.emitter)
+    encode(e, x.value, false)
+    emit_array_end(e.emitter)
+end
+
+function encodes_to_string(e::Encoder, x::TaggedValue)
+    false
+end
+
+function has_stringable_keys(e::Encoder, x::Dict)
+    for k in keys(x)
+	if ! encodes_to_string(e, k)
+            return false
+        end
+    end
+    true
+end
+
+function encode_map(e::Encoder, tag::AbstractString, x::Dict, as_key::Bool)
+    emit_array_start(e.emitter)
+    emit_tag(e.emitter, tag)
+
+    for (k, v) in x
+        emit_array_sep(e.emitter)
+        encode_value(e, k, true)
+        emit_array_sep(e.emitter)
+        encode_value(e, v, false)
+    end
+    emit_array_end(e.emitter)
+end
+
+function encode_value(e::Encoder, x::Dict, as_key::Bool)
+    if has_stringable_keys(e, x)
+        encode_map(e, "map", x, as_key)
+    else
+        encode_map(e,"cmap",  x, as_key)
+    end
+end
+
+function encode_value(e::Encoder, x::Dict{AbstractString}, as_key::Bool)
+    encode_map(e, "map", x, as_key)
+end
+
+function encode_value(e::Encoder, x::Dict{Symbol}, as_key::Bool)
+    encode_map(e, "map", x, as_key)
+end
+
+function encodes_to_string(e::Encoder, x::Dict)
+    false
+end
+
+# Default encoder raises exception.
 function encode_value(e::Encoder, x::Any, as_key::Bool)
-    println("Don't know what to do with:", x, " of type ", typeof(x), ".")
+    throw(ArgumentError("Don't know how to encode: $x of type $(typeof(x))."))
+
+end
+
+# Default is to claim we do encode to string.
+function encodes_to_string(e::Encoder, x::Any)
+    true
 end

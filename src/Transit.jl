@@ -6,6 +6,7 @@ module Transit
 
   export Encoder, encode, parse, decode
 
+  include("tagged_value.jl")
   include("tsymbol.jl")
   include("link.jl")
   include("constants.jl")
