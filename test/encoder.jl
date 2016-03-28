@@ -12,7 +12,7 @@ function square_trip(x)
     e = Encoder(buf)
     encode(e, x, false)
     s = takebuf_string(buf)
-    println(s)
+    #println(s)
     JSON.parse(s)
 end
 
@@ -27,4 +27,12 @@ end
 @test square_trip((1,2,"hello")) == Any["~list", Any[1,2,"hello"]]
 #@test square_trip(Set([1,2,3])) == Any["~set", Any[1,2,3]]
 
+@test square_trip([:hello, :hello, :hello]) == ["~:hello", "^0", "^0"]
+@test square_trip([:aaaa, :bbbb, :aaaa, :bbbb]) == ["~:aaaa", "~:bbbb", "^0", "^1"]
+
+symbols = [Transit.TSymbol("hello"), Transit.TSymbol("hello"), Transit.TSymbol("hello")]
+
+@test square_trip(symbols) == ["~\$hello", "^0", "^0"]
+
+@test square_trip([:aaaa, :bbbb, :aaaa, :bbbb]) == ["~:aaaa", "~:bbbb", "^0", "^1"]
 end

@@ -34,11 +34,11 @@ function encode_value(e::Encoder, s::AbstractString, askey::Bool)
 end
 
 function encode_value(e::Encoder, s::Symbol, askey::Bool)
-    emit(e.emitter, "~:$s")
+    emit(e.emitter, "~:$s", true)
 end
 
 function encode_value(e::Encoder, ts::TSymbol, askey::Bool)
-    emit(e.emitter, "~\$$(ts.s)")
+    emit(e.emitter, "~\$$(ts.s)", true)
 end
 
 function encode_value(e::Encoder, b::Bool, askey::Bool)

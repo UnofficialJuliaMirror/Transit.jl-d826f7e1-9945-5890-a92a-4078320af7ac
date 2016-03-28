@@ -6,7 +6,7 @@
   end
 
   function make_emitter(io, verbose::Bool)
-    let cache = verbose ? RollingCache() : NoopCache()
+    let cache = verbose ? NoopCache() : RollingCache()
       Emitter(io, cache)
     end
   end
@@ -20,10 +20,9 @@
   end
 
   function emit(e::Emitter, x::AbstractString, cacheable::Bool)
-    if iscacheable(x, cacheable)
-      x = write!(e.cache, x)
+    let value = iscacheable(x, cacheable) ? write!(e.cache, x) : x
+        print(e.io, JSON.json(value))
     end
-    print(e.io, JSON.json(x))
   end
 
   function emit(e::Emitter, x::Integer)
