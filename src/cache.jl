@@ -10,8 +10,10 @@ end
 
 # Real caching.
 type RollingCache <: Cache
-    keyToValue::Dict{ASCIIString,Any}
-    ValueToKey::Dict{Any,ASCIIString}
+    key_to_value::Dict{ASCIIString,Any}
+    value_to_key::Dict{Any,ASCIIString}
+
+    RollingCache() = new(Dict{ASCIIString,Any}(), Dict{Any,ASCIIString}())
 end
 
 const FIRST_ORD = 48
@@ -21,30 +23,32 @@ const CACHE_SIZE = CACHE_CODE_DIGITS * CACHE_CODE_DIGITS;
 const MIN_SIZE_CACHEABLE = 4
 
 function read(rc::RollingCache, key::AbstractString)
-      rc.key_to_value[key]
+    rc.key_to_value[key]
 end
 
 function write!(rc::RollingCache, name::AbstractString)
-    existing_key, present := rc.valueToKey[name]
-
-    if haskey(rc.valueToKe, name)
-        return existing_key
+    if haskey(rc.value_to_key, name)
+	return rc.value_to_key[name]
     end
 
     if iscachefull(rc)
         clear!(rc)
     end
 
-    key = encodeKey(len(rc.keyToValue))
-    rc.keyToValue[key] = name
-    rc.valueToKey[name] = key
+    key = encode_key(length(rc.key_to_value))
+    rc.key_to_value[key] = name
+    rc.value_to_key[name] = key
 
     name
 end
 
+function iscachefull(rc::RollingCache)
+    length(rc.key_to_value) > CACHE_SIZE
+end
+
 function clear!(rc::RollingCache)
-    empty!(rc.keyToValue)
-    empty!(rc.valueToKey)
+    empty!(rc.key_to_value)
+    empty!(rc.value_to_key)
 end
 
 function iscachekey(str::AbstractString)
@@ -60,7 +64,7 @@ function clear!(rc::RollingCache)
     rc.value_to_key = Hash{Any, AbstractString}()
 end
 
-function next_key(i::Integer)
+function encode_key(i::Integer)
     let hi = div(i, CACHE_CODE_DIGITS),
         lo = i % CACHE_CODE_DIGITS,
         ch = Char(lo+FIRST_ORD)
