@@ -17,3 +17,5 @@ end
                  [1, "and", 2, "we", Dict{Any,Any}("mix"=>"it up")]
 @test round_trip(Dict{Any,Any}("a" => 1, "b" => 2)) == Dict{Any,Any}("a" => 1, "b" => 2)
 @test round_trip(Dict{Any,Any}("a" => 1)) == Dict{Any,Any}("a" => 1)
+@test round_trip(Dict{Any,Any}("a" => Dict{Any,Any}("b" => 2))) ==
+                 Dict{Any,Any}("a" => Dict{Any,Any}("b" => 2))
