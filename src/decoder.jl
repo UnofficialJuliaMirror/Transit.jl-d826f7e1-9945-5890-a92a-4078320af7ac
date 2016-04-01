@@ -51,7 +51,7 @@ function decode_value(e::Decoder, node::Array{Any,1}, cache, as_map_key=false)
 end
 
 
-function decode_value(e::Decoder, hash::OrderedDict, cache, as_map_key=false)
+function decode_value(e::Decoder, hash::Dict, cache, as_map_key=false)
   if length(hash) != 1
     h = Dict{Any,Any}()
     for kv in hash
