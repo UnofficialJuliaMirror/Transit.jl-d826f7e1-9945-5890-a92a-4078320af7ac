@@ -21,5 +21,7 @@ end
                  Dict{Any,Any}("a" => Dict{Any,Any}("b" => 2))
 @test round_trip(["~:aaaa", "~:bbbb"]) == [:aaaa, :bbbb]
 @test round_trip([Dict{Any,Any}("~:b" => "~i3"), "~i2"]) == [Dict{Any,Any}(:b => 3), 2]
-
+@test round_trip(["~zINF", "~z-INF"]) == [Inf, -Inf]
+@test isnan(round_trip(["~zNaN"])[1])
+@test round_trip(["~f3.14"])[1] - 3.14 <= 0.000001
 
