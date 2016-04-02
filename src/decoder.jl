@@ -1,3 +1,5 @@
+
+
 type Tag
   tag::AbstractString
   value::Any
@@ -6,7 +8,15 @@ end
 type Decoder
   decoderFunctions
 
-  Decoder() = new(Dict{ASCIIString,Function}())
+  Decoder() = new(Dict{ASCIIString,Function}("_" => (x -> Nothing),
+                                             ":" => (x -> symbol(x)),
+                                             "\$" => (x -> TSymbol(x)),
+                                             "?" => (x -> true ? x : false),
+                                             "i" => (x -> Base.parse(x))))
+end
+
+function getindex(d::Decoder, k::AbstractString)
+    d.decoderFunctions[k]
 end
 
 function add_decoder(e::Decoder, tag::AbstractString, f::Function)
@@ -74,10 +84,12 @@ end
 function decode_value(e::Decoder, s::AbstractString, cache, as_map_key=false)
   # handle if cache key?
   # cache if cacheable
-  if s[1] == ESC
-    ## handle decoders cases
+  if startswith(s, ESC)
+    #2:2 is necessary to get str instead of char
+    e[s[2:2]](s[3:end])
+  else
+    s
   end
-  s
 end
 
 function decode_value(e::Decoder, tag::Tag, value, cache, as_map_key=false)

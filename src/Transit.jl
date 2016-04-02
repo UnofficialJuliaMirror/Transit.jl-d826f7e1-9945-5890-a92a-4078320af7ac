@@ -1,6 +1,7 @@
 module Transit
   import JSON
-  import DataStructures.OrderedDict
+  import Base.getindex
+  import Base
 
   using URIParser
 

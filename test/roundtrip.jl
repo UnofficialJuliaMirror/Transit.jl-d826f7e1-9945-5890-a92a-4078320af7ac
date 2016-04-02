@@ -19,3 +19,7 @@ end
 @test round_trip(Dict{Any,Any}("a" => 1)) == Dict{Any,Any}("a" => 1)
 @test round_trip(Dict{Any,Any}("a" => Dict{Any,Any}("b" => 2))) ==
                  Dict{Any,Any}("a" => Dict{Any,Any}("b" => 2))
+@test round_trip(["~:aaaa", "~:bbbb"]) == [:aaaa, :bbbb]
+@test round_trip([Dict{Any,Any}("~:b" => "~i3"), "~i2"]) == [Dict{Any,Any}(:b => 3), 2]
+
+
