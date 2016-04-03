@@ -5,7 +5,7 @@ import Transit
 
 function square_trip(inval)
   io = IOBuffer()
-  JSON.print(io, inval) # temporary hack for json only testing, Transit.print?
+  JSON.print(io, inval)
   seek(io, 0)
   Transit.parse(io)
 end
@@ -24,4 +24,6 @@ end
 @test square_trip(["~zINF", "~z-INF"]) == [Inf, -Inf]
 @test isnan(square_trip(["~zNaN"])[1])
 @test square_trip(["~f3.14"])[1] - 3.14 <= 0.000001
-
+@test square_trip(["~ude305d54-75b4-431b-adb2-eb6b9e546014"]) == [Base.Random.UUID("de305d54-75b4-431b-adb2-eb6b9e546014")]
+@test square_trip(["~'ok"]) == Any["ok"]
+#@test square_trip(["~m-6106017600000","~m0","~m946728000000","~m1396909037000"]) == TBD - what do you typically want?

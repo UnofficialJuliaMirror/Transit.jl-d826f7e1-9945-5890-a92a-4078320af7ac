@@ -9,23 +9,27 @@ type Decoder
   decoderFunctions
 
   Decoder() = new(Dict{ASCIIString,Function}(
-                     "_" => (x -> Nothing),
-                     ":" => (x -> symbol(x)),
+                     "_"  => (x -> Nothing),
+                     ":"  => (x -> symbol(x)),
                      "\$" => (x -> TSymbol(x)),
-                     "?" => (x -> true ? x : false),
-                     "i" => (x -> Base.parse(Int64, x)),
-                     "d" => (x -> Base.parse(Float64, x)),
-                     "f" => (x -> Base.parse(BigFloat, x)),
-                     "n" => (x -> Base.parse(BigInt, x)),
-                     "z" => (x -> if (x == "NaN")
-                                    NaN
-                                  elseif (x == "INF")
-                                    Inf
-                                  elseif (x == "-INF")
-                                    -Inf
-                                  else
-                                    throw(string("Don't know how to encode: ", x))
-                                  end)
+                     "?"  => (x -> true ? x : false),
+                     "i"  => (x -> Base.parse(Int64, x)),
+                     "d"  => (x -> Base.parse(Float64, x)),
+                     "f"  => (x -> Base.parse(BigFloat, x)),
+                     "'"  => (x -> x),
+                     "n"  => (x -> Base.parse(BigInt, x)),
+                     "u"  => (x -> Base.Random.UUID(x)), # only string case so far
+                     "t"  => (x -> Date(x, Dates.DateFormat("y-m-dTH:M:S.s"))),
+                     "m"  => (x -> Base.Dates.UTInstant(Dates.Millisecond(Base.parse(x)))), # maybe not sufficient
+                     "z"  => (x -> if (x == "NaN")
+                                     NaN
+                                   elseif (x == "INF")
+                                     Inf
+                                   elseif (x == "-INF")
+                                     -Inf
+                                   else
+                                     throw(string("Don't know how to encode: ", x))
+                                   end)
                 ))
 end
 
