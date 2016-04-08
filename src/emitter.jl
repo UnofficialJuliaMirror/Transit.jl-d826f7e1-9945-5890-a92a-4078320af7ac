@@ -29,6 +29,10 @@
     print(e.io, JSON.json(x))
   end
 
+  function emit(e::Emitter, x::Bool)
+    print(e.io, JSON.json(x))
+  end
+
   function emit_null(e::Emitter, askey::Bool)
     askey ? emit_tag(e, "_") : emit_raw(e, "null")
   end
@@ -39,6 +43,22 @@
 
   function emit_array_end(e::Emitter)
     print(e.io, "] ")
+  end
+
+  function emit_map_start(e::Emitter)
+    print(e.io, "{")
+  end
+
+  function emit_map_sep(e::Emitter, i=2)
+    emit_array_sep(e, i)
+  end
+
+  function emit_key_sep(e::Emitter)
+    print(e.io, ":")
+  end
+
+  function emit_map_end(e::Emitter)
+    print(e.io, "} ")
   end
 
   function emit_array_sep(e::Emitter, i=2)

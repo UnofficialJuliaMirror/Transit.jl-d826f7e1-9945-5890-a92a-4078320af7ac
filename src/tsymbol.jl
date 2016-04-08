@@ -1,5 +1,7 @@
 immutable TSymbol
   s::AbstractString
+
+  TSymbol(x) = new(string(x))
 end
 
 import Base.==, Base.hash, Base.string

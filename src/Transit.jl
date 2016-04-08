@@ -1,7 +1,7 @@
 module Transit
   import JSON
-  import DataStructures.OrderedDict
 
+  using DataStructures
   using URIParser
 
   export Encoder, encode, parse, decode
@@ -15,5 +15,6 @@ module Transit
   include("utilities.jl")
   include("emitter.jl")
   include("encoder.jl")
+  include("writer.jl")
   include("reader.jl")
 end

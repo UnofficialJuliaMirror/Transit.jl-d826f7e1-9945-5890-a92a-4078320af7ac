@@ -43,7 +43,7 @@ function write!(rc::RollingCache, name::AbstractString)
 end
 
 function iscachefull(rc::RollingCache)
-    length(rc.key_to_value) > CACHE_SIZE
+    length(rc.key_to_value) >= CACHE_SIZE
 end
 
 function clear!(rc::RollingCache)
@@ -60,8 +60,8 @@ function iscacheable(str::AbstractString, key=false)
 end
 
 function clear!(rc::RollingCache)
-    rc.key_to_value = Hash{AbstractString, Any}()
-    rc.value_to_key = Hash{Any, AbstractString}()
+    rc.key_to_value = Dict{AbstractString, Any}()
+    rc.value_to_key = Dict{Any, AbstractString}()
 end
 
 function encode_key(i::Integer)
