@@ -1,5 +1,7 @@
 module Transit
   import JSON
+  import Base.getindex
+  import Base
 
   using DataStructures
   using URIParser

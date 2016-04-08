@@ -1,3 +1,5 @@
+
+
 type Tag
   tag::AbstractString
   value::Any
@@ -6,7 +8,33 @@ end
 type Decoder
   decoderFunctions
 
-  Decoder() = new(Dict{ASCIIString,Function}())
+  Decoder() = new(Dict{ASCIIString,Function}(
+                     "_"  => (x -> Nothing),
+                     ":"  => (x -> symbol(x)),
+                     "\$" => (x -> TSymbol(x)),
+                     "?"  => (x -> true ? x : false),
+                     "i"  => (x -> Base.parse(Int64, x)),
+                     "d"  => (x -> Base.parse(Float64, x)),
+                     "f"  => (x -> Base.parse(BigFloat, x)),
+                     "'"  => (x -> x),
+                     "n"  => (x -> Base.parse(BigInt, x)),
+                     "u"  => (x -> Base.Random.UUID(x)), # only string case so far
+                     "t"  => (x -> Date(x, Dates.DateFormat("y-m-dTH:M:S.s"))),
+                     "m"  => (x -> Base.Dates.UTInstant(Dates.Millisecond(Base.parse(x)))), # maybe not sufficient
+                     "z"  => (x -> if (x == "NaN")
+                                     NaN
+                                   elseif (x == "INF")
+                                     Inf
+                                   elseif (x == "-INF")
+                                     -Inf
+                                   else
+                                     throw(string("Don't know how to encode: ", x))
+                                   end)
+                ))
+end
+
+function getindex(d::Decoder, k::AbstractString)
+    d.decoderFunctions[k]
 end
 
 function add_decoder(e::Decoder, tag::AbstractString, f::Function)
@@ -51,7 +79,7 @@ function decode_value(e::Decoder, node::Array{Any,1}, cache, as_map_key=false)
 end
 
 
-function decode_value(e::Decoder, hash::OrderedDict, cache, as_map_key=false)
+function decode_value(e::Decoder, hash::Dict, cache, as_map_key=false)
   if length(hash) != 1
     h = Dict{Any,Any}()
     for kv in hash
@@ -74,10 +102,12 @@ end
 function decode_value(e::Decoder, s::AbstractString, cache, as_map_key=false)
   # handle if cache key?
   # cache if cacheable
-  if s[1] == ESC
-    ## handle decoders cases
+  if startswith(s, ESC)
+    #2:2 is necessary to get str instead of char
+    e[s[2:2]](s[3:end])
+  else
+    s
   end
-  s
 end
 
 function decode_value(e::Decoder, tag::Tag, value, cache, as_map_key=false)
