@@ -1,4 +1,4 @@
 type TaggedValue
     tag::AbstractString
-    value
+    value::Any
 end
