@@ -2,7 +2,7 @@ type Decoder
   decoderFunctions
 
   Decoder() = new(Dict{ASCIIString,Function}(
-                     "_"  => (x -> Nothing),
+                     "_"  => (x -> nothing),
                      ":"  => (x -> symbol(x)),
                      "\$" => (x -> TSymbol(x)),
                      "?"  => (x -> true ? x : false),
@@ -34,15 +34,15 @@ function add_decoder(e::Decoder, tag::AbstractString, f::Function)
   e.decoderFunctions[tag] = f
 end
 
-function decode(e::Decoder, node::Any, cache=Nothing, as_map_key=false)
-  #if cache == Nothing
+function decode(e::Decoder, node::Any, cache=nothing, as_map_key=false)
+  #if cache == nothing
   #  cache = RollingCache()
   #end
   decode_value(e, node, cache, as_map_key)
 end
 
 
-function decode_value(e::Decoder, node::Any, cache=Nothing, as_map_key=false)
+function decode_value(e::Decoder, node::Any, cache=nothing, as_map_key=false)
     node
 end
 
