@@ -11,6 +11,8 @@ function square_trip(inval)
 end
 
 
+@test square_trip(["~#'",1]) == 1
+
 @test square_trip([1, 2, 3, 4]) == [1, 2, 3, 4]
 @test square_trip(["some", "funny", "words"]) == ["some", "funny", "words"]
 @test square_trip([1, "and", 2, "we", Dict{Any,Any}("mix"=>"it up")]) == 
