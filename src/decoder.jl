@@ -62,7 +62,7 @@ function decode_value(e::Decoder, node::Array{Any,1}, cache, as_map_key=false)
       return returned_dict
     else
       decoded = decode_value(e, node[1], cache, as_map_key)
-      if isa(decoded, TaggedValue)
+      if isa(decoded, Tag)
         return decode_value(e, decoded, node[2], cache, as_map_key)
       end
     end
@@ -84,8 +84,8 @@ function decode_value(e::Decoder, hash::Dict, cache, as_map_key=false)
   else
     for (k,v) in hash
       key = decode_value(e, k, cache, true)
-      if isa(key, TaggedValue)
-        return decode_value(e, decoded, value, cache, as_map_key)
+      if isa(key, Tag)
+        return decode_value(e, key, v, cache, as_map_key)
       end
       return Dict{Any,Any}(key => decode_value(e, v, cache, false))
     end
@@ -95,7 +95,9 @@ end
 function decode_value(e::Decoder, s::AbstractString, cache, as_map_key=false)
   # handle if cache key?
   # cache if cacheable
-  if startswith(s, ESC)
+  if startswith(s, TAG)
+    Tag(s[3:end])
+  elseif startswith(s, ESC)
     #2:2 is necessary to get str instead of char
     e[s[2:2]](s[3:end])
   else
@@ -103,5 +105,10 @@ function decode_value(e::Decoder, s::AbstractString, cache, as_map_key=false)
   end
 end
 
-function decode_value(e::Decoder, tag::TaggedValue, value, cache, as_map_key=false)
+function decode_value(e::Decoder, tag::Tag, value, cache, as_map_key=false)
+    if haskey(e.decoderFunctions, tag.rep)
+      e[tag.rep](value)
+    else
+      TaggedValue(tag.rep, value)
+    end
 end

@@ -1,4 +1,7 @@
+include("../src/Transit.jl")
 module TestTransit
+
+
 
 using URIParser
 using DataStructures  
