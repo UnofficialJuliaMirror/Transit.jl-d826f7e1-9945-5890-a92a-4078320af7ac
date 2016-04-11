@@ -69,7 +69,7 @@ map_nested = Dict{Any,Any}(:simple => map_simple, :mixed => map_mixed)
 
 vector_simple  = Any[1, 2, 3]
 
-vector_mixed  = Any[0, 1, 2.0, true, false, "five", :six, TSymbol(:seven), "~eight", Void()]
+vector_mixed  = Any[0, 1, 2.0, true, false, "five", :six, TSymbol(:seven), "~eight", nothing]
 
 vector_nested = Any[vector_simple, vector_mixed]
 
@@ -118,7 +118,7 @@ immutable Exemplar
 end
 
 exemplars = [
-    Exemplar( "nil", "The nil/null/ain't there value", Void()),
+    Exemplar( "nil", "The nil/null/ain't there value", nothing),
     Exemplar( "true", "True", true),
     Exemplar( "false", "False", false),
     Exemplar( "zero", "Zero (integer)", 0),
