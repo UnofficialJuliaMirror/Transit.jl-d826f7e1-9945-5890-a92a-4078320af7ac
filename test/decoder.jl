@@ -12,6 +12,7 @@ end
 
 
 @test square_trip(["~#'",1]) == 1
+@test square_trip(Dict{Any,Any}("~#'" => 1)) == 1
 
 @test square_trip([1, 2, 3, 4]) == [1, 2, 3, 4]
 @test square_trip(["some", "funny", "words"]) == ["some", "funny", "words"]
