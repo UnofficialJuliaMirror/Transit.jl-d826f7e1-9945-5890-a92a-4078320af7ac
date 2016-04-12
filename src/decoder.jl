@@ -34,7 +34,7 @@ function add_decoder(e::Decoder, tag::AbstractString, f::Function)
   e.decoderFunctions[tag] = f
 end
 
-function decode(e::Decoder, node::Any, cache=nothing, as_map_key=false)
+function decode(e::Decoder, node::Any, cache=nothing, as_map_key::Bool=false)
   #if cache == nothing
   #  cache = RollingCache()
   #end
@@ -42,7 +42,7 @@ function decode(e::Decoder, node::Any, cache=nothing, as_map_key=false)
 end
 
 
-function decode_value(e::Decoder, node::Any, cache=nothing, as_map_key=false)
+function decode_value(e::Decoder, node::Any, cache=nothing, as_map_key::Bool=false)
     node
 end
 
@@ -50,7 +50,7 @@ function decode_value(e::Decoder, node::Bool)
     node ? true : false # where we may have to add TTrue, TFalse for set issue
 end
 
-function decode_value(e::Decoder, node::Array{Any,1}, cache, as_map_key=false)
+function decode_value(e::Decoder, node::Array{Any,1}, cache, as_map_key::Bool=false)
   if !isempty(node)
     if node[1] == MAP_AS_ARR
       returned_dict = Dict()
@@ -72,7 +72,7 @@ function decode_value(e::Decoder, node::Array{Any,1}, cache, as_map_key=false)
 end
 
 
-function decode_value(e::Decoder, hash::Dict, cache, as_map_key=false)
+function decode_value(e::Decoder, hash::Dict, cache, as_map_key::Bool=false)
   if length(hash) != 1
     h = Dict{Any,Any}()
     for kv in hash
@@ -92,7 +92,7 @@ function decode_value(e::Decoder, hash::Dict, cache, as_map_key=false)
   end
 end
 
-function decode_value(e::Decoder, s::AbstractString, cache, as_map_key=false)
+function decode_value(e::Decoder, s::AbstractString, cache, as_map_key::Bool=false)
   # handle if cache key?
   # cache if cacheable
   if startswith(s, TAG)
@@ -105,7 +105,7 @@ function decode_value(e::Decoder, s::AbstractString, cache, as_map_key=false)
   end
 end
 
-function decode_value(e::Decoder, tag::Tag, value, cache, as_map_key=false)
+function decode_value(e::Decoder, tag::Tag, value, cache, as_map_key::Bool=false)
     if haskey(e.decoderFunctions, tag.rep)
       e[tag.rep](value)
     else
