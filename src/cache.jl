@@ -52,7 +52,7 @@ function clear!(rc::RollingCache)
 end
 
 function iscachekey(str::AbstractString)
-    str[0] == SUB && str != MAP_AS_ARRAY
+    startswith(str, SUB) && str != MAP_AS_ARRAY
 end
 
 function iscacheable(str::AbstractString, key=false)
