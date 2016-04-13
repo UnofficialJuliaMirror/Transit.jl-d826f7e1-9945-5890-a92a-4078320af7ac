@@ -11,6 +11,9 @@ function square_trip(inval)
 end
 
 
+@test square_trip(["~~foo"]) == ["~foo"]
+@test square_trip(["~#'","~~foo"]) == "~foo"
+
 @test square_trip(["~#'",1]) == 1
 @test square_trip(Dict{Any,Any}("~#'" => 1)) == 1
 
