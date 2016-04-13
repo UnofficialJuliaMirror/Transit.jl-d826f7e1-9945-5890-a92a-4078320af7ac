@@ -15,14 +15,14 @@ type Decoder
                         "t"  => (x -> Date(x, Dates.DateFormat("y-m-dTH:M:S.s"))),
                         "m"  => (x -> Base.Dates.UTInstant(Dates.Millisecond(Base.parse(x)))), # maybe not sufficient
                         "z"  => (x -> if (x == "NaN")
-                                        NaN
-                                    elseif (x == "INF")
-                                        Inf
-                                    elseif (x == "-INF")
-                                        -Inf
-                                    else
-                                        throw(string("Don't know how to encode: ", x))
-                                    end)
+                                          NaN
+                                      elseif (x == "INF")
+                                          Inf
+                                      elseif (x == "-INF")
+                                          -Inf
+                                      else
+                                          throw(string("Don't know how to encode: ", x))
+                                      end)
                     ))
 end
 
@@ -95,6 +95,8 @@ function decode_value(e::Decoder, s::AbstractString, cache::Cache, as_map_key::B
         decode_value(e, write!(cache, s), cache, as_map_key)
     elseif startswith(s, TAG)
         Tag(s[3:end])
+    elseif startswith(s, ESC_ESC) ||  startswith(s, ESC_SUB) || startswith(s, ESC_RES)
+        s[2:end]
     elseif startswith(s, ESC)
         #2:2 is necessary to get str instead of char
         e[s[2:2]](s[3:end])
@@ -105,8 +107,8 @@ end
 
 function decode_value(e::Decoder, tag::Tag, value, cache::Cache, as_map_key::Bool=false)
     if haskey(e.decoderFunctions, tag.rep)
-        e[tag.rep](value)
+        e[tag.rep](decode_value(e, value, cache, false))
     else
-        TaggedValue(tag.rep, value)
+        TaggedValue(tag.rep, decode_value(e, value, cache, false))
     end
 end

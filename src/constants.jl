@@ -10,3 +10,7 @@ const SUB = "^"
 const RES = "`"
 const TAG = "~#"
 const QUOTE = "'"
+
+const ESC_ESC = string(ESC, ESC)
+const ESC_SUB = string(ESC, SUB)
+const ESC_RES = string(ESC, RES)
