@@ -9,7 +9,7 @@ type Decoder
                         "i"  => (x -> Base.parse(Int64, x)),
                         "d"  => (x -> Base.parse(Float64, x)),
                         "f"  => (x -> Base.parse(BigFloat, x)),
-                        "'"  => (x -> x),
+                        "r"  => (x -> URIParser.URI(x)),
                         "n"  => (x -> Base.parse(BigInt, x)),
                         "u"  => (x -> Base.Random.UUID(x)), # only string case so far
                         "t"  => (x -> Date(x, Dates.DateFormat("y-m-dTH:M:S.s"))),
@@ -25,7 +25,10 @@ type Decoder
                                       end),
 
                         # tag decoders
+                        "'"  => (x -> x),
                         "set" => (x -> Set(x)),
+                        "link" => (x -> Link(x...)),
+                        "list" => (x -> x),
                         "cmap" => (x -> [a[1] => a[2]
                                          for a in zip(x[1:2:end], x[2:2:end])])
                     ))
