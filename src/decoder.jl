@@ -22,7 +22,12 @@ type Decoder
                                           -Inf
                                       else
                                           throw(string("Don't know how to encode: ", x))
-                                      end)
+                                      end),
+
+                        # tag decoders
+                        "set" => (x -> Set(x)),
+                        "cmap" => (x -> [a[1] => a[2]
+                                         for a in zip(x[1:2:end], x[2:2:end])])
                     ))
 end
 
