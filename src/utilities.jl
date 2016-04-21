@@ -12,3 +12,12 @@ function constantly(value)
         value
     end
 end
+
+function tolist(a::AbstractArray)
+  l = list()
+  for item in a
+    l = cons(item, l)
+  end
+  reverse(l)
+end
+

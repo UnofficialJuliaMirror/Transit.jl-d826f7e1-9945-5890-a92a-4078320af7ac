@@ -28,7 +28,7 @@ type Decoder
                         "'"  => (x -> x),
                         "set" => (x -> Set(x)),
                         "link" => (x -> Link(x...)),
-                        "list" => (x -> x),
+                        "list" => tolist,
                         "cmap" => (x -> [a[1] => a[2]
                                          for a in zip(x[1:2:end], x[2:2:end])])
                     ))
