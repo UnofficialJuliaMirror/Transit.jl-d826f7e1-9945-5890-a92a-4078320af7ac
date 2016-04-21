@@ -167,7 +167,7 @@ exemplars = [
 
     Exemplar( "one_uri", "A single URI", first(uris)),
 
-    Exemplar( "uris", "A vector of URIs", uris),
+    ###Exemplar( "uris", "A vector of URIs", uris),
 
 
     Exemplar(
@@ -373,14 +373,22 @@ function test_writing(e::Exemplar)
   expected = JSON.parse(open(path))
   actual = JSON.parse(Transit.to_transit(e.value))
   if !issame(expected, actual)
-      println("$(e.file_name): Expected $expected $(typeof(expected)) but got $actual $(typeof(actual))")
+      println("WRITE: $(e.file_name): Expected $expected $(typeof(expected)) but got $actual $(typeof(actual))")
   end
 end
 
+function test_reading(e::Exemplar)
+  path = "test/transit-format/examples/0.8/simple/$(e.file_name).json"
+  actual = Transit.parse(open(path))
+  if ! issame(e.value, actual)
+      println("READ: $(e.file_name): Expected $(e.value) $(typeof(e.value)) but got $actual $(typeof(actual))")
+  end
+end
 
 function test_exemplars()
     for e in exemplars
-      #println(e)
+      println(e.file_name)
+      test_reading(e)
       test_writing(e)
     end
 end
