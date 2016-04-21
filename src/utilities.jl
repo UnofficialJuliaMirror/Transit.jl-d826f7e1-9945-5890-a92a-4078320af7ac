@@ -1,10 +1,10 @@
 function startswith(str::AbstractString, pats...)
     for pat in pats
-        if start(search(str, pat)) != 1
-            return false
+        if start(search(str, pat)) == 1
+            return true
         end
     end
-    true
+    false
 end
 
 function constantly(value)
