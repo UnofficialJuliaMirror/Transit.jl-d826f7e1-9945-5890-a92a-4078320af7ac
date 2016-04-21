@@ -56,12 +56,12 @@ end
 
 function decode_value(e::Decoder, node::Array{Any,1}, cache::Cache, as_map_key::Bool=false)
     if !isempty(node)
-        if node[1] == MAP_AS_ARR
+        if node[1] == MAP_AS_ARRAY
             returned_dict = Dict()
-            for kv in node[2:end]
-                key = decode_value(e, kv[1], cache, true)
-                value = decode_value(e, kv[2], cache, as_map_key)
-                returned_dict[key] = val
+            for i in 2:2:length(node)
+                key = decode_value(e, node[i], cache, true)
+                value = decode_value(e, node[i+1], cache, as_map_key)
+                returned_dict[key] = value
             end
             return returned_dict
         else
@@ -98,9 +98,15 @@ end
 
 function decode_value(e::Decoder, s::AbstractString, cache::Cache, as_map_key::Bool=false)
     if iscachekey(s)
-        decode_value(e, read(cache, s), cache, as_map_key)
-    elseif iscacheable(s, as_map_key)
-        decode_value(e, write!(cache, s), cache, as_map_key)
+        return decode_value(e, read(cache, s), cache, as_map_key)
+    end
+
+    if iscacheable(s, as_map_key)
+        write!(cache, s)
+    end
+
+    if !startswith(s, ESC)
+        s
     elseif startswith(s, TAG)
         Tag(s[3:end])
     elseif startswith(s, ESC_ESC) ||  startswith(s, ESC_SUB) || startswith(s, ESC_RES)
@@ -108,8 +114,6 @@ function decode_value(e::Decoder, s::AbstractString, cache::Cache, as_map_key::B
     elseif startswith(s, ESC)
         #2:2 is necessary to get str instead of char
         e[s[2:2]](s[3:end])
-    else
-        s
     end
 end
 
