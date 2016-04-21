@@ -143,7 +143,7 @@ exemplars = [
     Exemplar( "strings_hat", "A vector of strings starting with ^",
 	      map(x -> "^$x", small_strings)),
 
-    Exemplar( "small_ints", "A vector of eleven small integers", range_centered_on(0)),
+    Exemplar( "small_ints", "A vector of eleven small integers", Array(range_centered_on(0))),
 
     Exemplar( "ints", "vector of ints", Array(0:127)),
 
@@ -203,7 +203,7 @@ exemplars = [
 	      dict_of(1, "one", 2, "two")),
 
     Exemplar( "map_vector_keys", "A map with vector keys",
-	      dict_of([1 1], "one", [2 2], "two")),
+	      dict_of(Any[1,1], "one", Any[2,2], "two")),
 
     Exemplar( "map_10_items", "10 item map",  dict_of_size(10)),
 
@@ -307,7 +307,7 @@ exemplars = [
       "Vector with vals with unrecognized encodings",
       ["~Unrecognized"]),
 
-    Exemplar( "vector_special_numbers", "Vector with special numbers", [NaN, Inf, -Inf]),
+    Exemplar( "vector_special_numbers", "Vector with special numbers", Any[NaN, Inf, -Inf]),
 
 ###    Exemplar(
 ###      "cmap_pathological",
@@ -325,16 +325,6 @@ function issame(x::Any, y::Any)
     end
 end
 
-function findsame(x, col)
-    for item in col
-	if issame(x, item)
-            return true
-        end
-    end
-    #println("cant find $x in $col")
-    false
-end
-
 function issame(x::Set, y::Set)
     if length(x) != length(y)
       return false
@@ -346,6 +336,14 @@ function issame(x::Set, y::Set)
         end
     end
     return true
+end
+
+function issame(x::AbstractFloat, y::AbstractFloat)
+    if isnan(x) && isnan(y)
+        true
+    else
+        x == y
+    end
 end
 
 function issame(x::Array, y::Array)
@@ -366,6 +364,16 @@ function issame(x::Array, y::Array)
     end
     true
   end
+end
+
+function findsame(x, col)
+    for item in col
+	if issame(x, item)
+            return true
+        end
+    end
+    #println("cant find $x in $col")
+    false
 end
 
 function test_writing(e::Exemplar)
