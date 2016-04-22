@@ -35,32 +35,32 @@ Really this is all TBD at this point.
 
 | Semantic Type | write accepts | read produces |
 |:--------------|:--------------|:--------------|
-| null| Nothing | Nothing |
+| null| anything of type Void | Void() |
 | string| string | string |
 | boolean | Bool | Bool |
 | integer, signed 64 bit| any signed or unsiged int type | Int64 |
 | floating pt decimal| Float32 or Float64 | Float64 |
 | bytes| Array{Int8} | Array{Int8} |
 | keyword | Symbol | Symbol |
-| symbol | Transit.Symbol | Transit.Symbol
+| symbol | Transit.TSymbol | Transit.TSymbol
 | arbitrary precision decimal| BigFloat | BigFloat |
 | arbitrary precision integer| BigInt | BigInt |
-| point in time | Instant, Time | Instant |
-| point in time RFC 33339 | UTInstant, DateTime | UTInstant |
+| point in time | TBD | TBD |
+| point in time RFC 33339 | TBD | TBD |
 | uuid | Base.Random.UUID| Base.Random.UUID|
-| uri | URIParser.URI | URIParser.URI |
+| uri | Transit.TURI | Transit.TURI |
 | char | Char | Char |
 | special numbers | Inf, Nan| Inf, Nan
-| array | arrays or slices | []interface{} |
-| map | Dict{Any,Any} | Dict{Any,Any} | 
-| set |  Set{Any} | Set{Any} |
-| list | Array{Any} | Array{Any} |
+| array | arrays | Any[] |
+| map | Dict | Dict{Any,Any} | 
+| set |  Set | Set{Any} |
+| list | DataStructures.Cons | DataStructures.Cons |
 | map w/ composite keys |  Dict{Array,Any} |  Dict{Array,Any} |
-| link | Transit.Link | Transit.Link |
+| link | Transit.TLink | Transit.TLink |
 
 
 ## Copyright and License
-Copyright © 2016 Russ Olsen
+Copyright © 2016 Russ Olsen, Ben Kamphaus
 
 This library is a Julia port of the Java and Ruby versions created and maintained by Cognitect, therefore
 
