@@ -87,8 +87,8 @@ function encode_value(e::Encoder, b::Bool, askey::Bool)
     end
 end
 
-function encode_value(e::Encoder, b::Char, askey::Bool)
-    emit(e.emitter, "~c$c", askey)
+function encode_value(e::Encoder, x::Char, askey::Bool)
+    emit(e.emitter, "~c$x", askey)
 end
 
 function encode_value(e::Encoder, u::URI, askey::Bool)
@@ -199,6 +199,11 @@ function encode_value(e::Encoder, x::DateTime, askey::Bool)
     let millis = trunc(Int64, Dates.datetime2unix(x)) * 1000
         emit(e.emitter, "~m$millis", askey)
     end
+end
+
+function encode_value(e::Encoder, x::Array{Int8}, askey::Bool)
+    encoded = base64encode(x)
+    emit(e.emitter, "~b$encoded", askey)
 end
 
 function encode_value(e::Encoder, x::Date, askey::Bool)

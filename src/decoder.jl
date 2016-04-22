@@ -6,6 +6,8 @@ type Decoder
                         ":"  => (x -> symbol(x)),
                         "\$" => (x -> TSymbol(x)),
                         "?"  => (x -> true ? x : false),
+                        "b"  => (x -> base64decode(x)),
+                        "c"  => (x -> x[1]),
                         "i"  => (x -> Base.parse(Int64, x)),
                         "d"  => (x -> Base.parse(Float64, x)),
                         "f"  => (x -> Base.parse(BigFloat, x)),
