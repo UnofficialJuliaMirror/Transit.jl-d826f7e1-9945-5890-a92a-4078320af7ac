@@ -7,6 +7,7 @@ using DataStructures
 import JSON
 import Transit
 import Transit.TSymbol
+import Transit.TSet
 
 
 function range_centered_on(n)
@@ -184,11 +185,11 @@ exemplars = [
     Exemplar( "list_nested", "Two lists nested inside an outter list",
       list(list_of(vector_simple), list_of(vector_mixed))),
 
-    Exemplar( "set_simple", "A simple set", Set(vector_simple)),
-    Exemplar( "set_empty", "An empty set", Set()),
-    Exemplar( "set_mixed", "A ten element set with mixed values", Set(vector_mixed)),
+    Exemplar( "set_simple", "A simple set", TSet(vector_simple)),
+    Exemplar( "set_empty", "An empty set", TSet()),
+    Exemplar( "set_mixed", "A ten element set with mixed values", TSet(vector_mixed)),
     Exemplar( "set_nested", "Two sets nested inside an outter set",
-      Set([Set(vector_simple), Set(vector_mixed)])),
+      TSet([TSet(vector_simple), TSet(vector_mixed)])),
 
     Exemplar( "map_simple", "A simple map", map_simple),
     Exemplar( "map_mixed", "A mixed map", map_mixed),
@@ -322,7 +323,7 @@ function issame(x::Any, y::Any)
     end
 end
 
-function issame(x::Set, y::Set)
+function issame(x::TSet, y::TSet)
     if length(x) != length(y)
       return false
     end
@@ -351,7 +352,7 @@ function issame(x::Array, y::Array)
   elseif !issame(x[1], y[1])
     false
   elseif x[1] == "^ " || x[1] == "~#cmap" || x[1] == "~#set"
-    issame(Set(x), Set(y))
+    issame(TSet(x), TSet(y))
   else
     for i in 1:length(x)
         if !issame(x[i], y[i])
@@ -372,7 +373,7 @@ function findsame(x, col)
 end
 
 function test_writing(e::Exemplar)
-  path = "test/transit-format/examples/0.8/simple/$(e.file_name).json"
+  path = "../transit-format/examples/0.8/simple/$(e.file_name).json"
   expected = JSON.parse(open(path))
   actual = JSON.parse(Transit.to_transit(e.value))
   if !issame(expected, actual)
@@ -383,7 +384,7 @@ function test_writing(e::Exemplar)
 end
 
 function test_reading(e::Exemplar)
-  path = "test/transit-format/examples/0.8/simple/$(e.file_name).json"
+  path = "../transit-format/examples/0.8/simple/$(e.file_name).json"
   actual = Transit.parse(open(path))
   if ! issame(e.value, actual)
       println("READ: $(e.file_name): Expected $(e.value) $(typeof(e.value)) but got $actual $(typeof(actual))")

@@ -28,7 +28,7 @@ type Decoder
 
                         # tag decoders
                         "'"  => (x -> x),
-                        "set" => (x -> Set(x)),
+                        "set" => (x -> TSet(x)),
                         "link" => (x -> Link(x...)),
                         "list" => tolist,
                         "cmap" => (x -> [a[1] => a[2]

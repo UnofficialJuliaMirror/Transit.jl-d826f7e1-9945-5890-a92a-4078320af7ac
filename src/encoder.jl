@@ -235,11 +235,21 @@ function encodes_to_string(e::Encoder, x::Tuple)
     false
 end
 
+# Maybe can use AbstractSet but instead but need to figure out version boundary
+# for when it's available
 function encode_value(e::Encoder, x::Set, askey::Bool)
     encode_tagged_enumerable(e, "#set", enumerate(x))
 end
 
+function encode_value(e::Encoder, x::TSet, askey::Bool)
+    encode_tagged_enumerable(e, "#set", enumerate(x))
+end
+
 function encodes_to_string(e::Encoder, x::Set)
+    false
+end
+
+function encodes_to_string(e::Encoder, x::TSet)
     false
 end
 
