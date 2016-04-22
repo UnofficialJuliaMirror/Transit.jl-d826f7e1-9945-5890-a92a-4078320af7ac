@@ -1,9 +1,7 @@
 include("../src/Transit.jl")
 module TestTransit
 
-
-
-using URIParser
+using Base.Test
 using DataStructures  
 
 import JSON
@@ -99,10 +97,10 @@ uuids = [Base.Random.UUID( "5a2cbea3-e8c6-428b-b525-21239370dd55"),
          Base.Random.UUID( "501a978e-3a3e-4060-b3be-1cf2bd4b1a38"),
          Base.Random.UUID( "b3ba141a-a776-48e4-9fae-a28ea8571f58")]
 
-uris = [URIParser.URI("http://example.com"),
-        URIParser.URI("ftp://example.com"),
-        URIParser.URI("file:///path/to/file.txt")
-##TBD        URIParser.URI("http://www.詹姆斯.com/")
+uris = [Transit.TURI("http://example.com"),
+        Transit.TURI("ftp://example.com"),
+        Transit.TURI("file:///path/to/file.txt"),
+        Transit.TURI("http://www.詹姆斯.com/")
 ]
 
 keywords = [:a, :ab, :abc, :abcd, :abcde, :a1, :b2, :c3, :a_b]
@@ -320,7 +318,6 @@ function issame(x::Any, y::Any)
     if x == y
         true
     else
-        #println("Not same: $x $(typeof(x)) == $y $(typeof(y))")
 	false
     end
 end
@@ -357,7 +354,6 @@ function issame(x::Array, y::Array)
     issame(Set(x), Set(y))
   else
     for i in 1:length(x)
-        #println("comparing $(x[i]) with $(y[i])")
         if !issame(x[i], y[i])
             return false
         end
@@ -372,7 +368,6 @@ function findsame(x, col)
             return true
         end
     end
-    #println("cant find $x in $col")
     false
 end
 
@@ -382,7 +377,9 @@ function test_writing(e::Exemplar)
   actual = JSON.parse(Transit.to_transit(e.value))
   if !issame(expected, actual)
       println("WRITE: $(e.file_name): Expected $expected $(typeof(expected)) but got $actual $(typeof(actual))")
+      return false
   end
+  true
 end
 
 function test_reading(e::Exemplar)
@@ -390,15 +387,24 @@ function test_reading(e::Exemplar)
   actual = Transit.parse(open(path))
   if ! issame(e.value, actual)
       println("READ: $(e.file_name): Expected $(e.value) $(typeof(e.value)) but got $actual $(typeof(actual))")
+      return false
   end
+  true
 end
 
 function test_exemplars()
+    failures = 0
     for e in exemplars
-      println(e.file_name)
-      test_reading(e)
-      test_writing(e)
+      failures = test_reading(e) ? failures : failures + 1
+      failures = test_writing(e) ? failures : failures + 1
     end
+
+    if failures > 0
+        println("Number of failures: $failures")
+    end
+    failures == 0
 end
+
+@test test_exemplars()
 
 end
