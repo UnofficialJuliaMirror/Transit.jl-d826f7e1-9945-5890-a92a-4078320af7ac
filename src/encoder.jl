@@ -96,6 +96,11 @@ function encode_value(e::Encoder, u::URI, askey::Bool)
     emit(e.emitter, "~r$s", askey)
 end
 
+function encode_value(e::Encoder, u::TURI, askey::Bool)
+    s = u.value
+    emit(e.emitter, "~r$s", askey)
+end
+
 function encode_value(e::Encoder, u::Base.Random.UUID, askey::Bool)
     s = string(u)
     emit(e.emitter, "~u$s", askey)

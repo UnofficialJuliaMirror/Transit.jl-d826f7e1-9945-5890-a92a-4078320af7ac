@@ -10,6 +10,7 @@ module Transit
 
   include("tagged_value.jl")
   include("tsymbol.jl")
+  include("turi.jl")
   include("link.jl")
   include("constants.jl")
   include("cache.jl")
