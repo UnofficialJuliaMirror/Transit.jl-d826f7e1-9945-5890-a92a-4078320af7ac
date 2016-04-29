@@ -31,6 +31,7 @@ type Decoder
                         "set" => (x -> TSet(x)),
                         "link" => (x -> Link(x...)),
                         "list" => tolist,
+                        "ratio" => (x -> x[1]//x[2]),
                         "cmap" => (x -> [a[1] => a[2]
                                          for a in zip(x[1:2:end], x[2:2:end])])
                     ))
