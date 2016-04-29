@@ -4,7 +4,7 @@ using Base.Test
 using Transit
 using JSON
 
-import DataStructures.OrderedDict
+import DataStructures.list
 
 # Convert the value given to transit and then read
 # back in the resulting JSON. Not a round trip, since
@@ -14,12 +14,11 @@ function round_trip(x, verbose=false)
     buf = IOBuffer()
     e = Transit.write(buf, x)
     s = takebuf_string(buf)
-    println("s: $s")
     Transit.parse(IOBuffer(s))
 end
 
-function test_round_trip(value)
-    x = round_trip(value)
+function test_round_trip(value, verbose=false)
+    x = round_trip(value, verbose)
     println("value returned is $x")
     x == value
 end
@@ -32,7 +31,7 @@ end
 @test test_round_trip(false)
 @test test_round_trip(2//3)
 @test test_round_trip([1,2,3])
-@test test_round_trip((1,2,"hello"))
+@test test_round_trip(list(1,2,"hello"))
 
 @test test_round_trip([:hello, :hello, :hello])
 @test test_round_trip([:aaaa, :bbbb, :aaaa, :bbbb])
@@ -45,4 +44,8 @@ symbols = [Transit.TSymbol("hello"), Transit.TSymbol("hello"), Transit.TSymbol("
 @test test_round_trip([:aaaa, :bbbb, :aaaa, :bbbb], true)
 
 @test test_round_trip(Dict([("aaa", 11), ("bbb", 22)]), true)
+
+@test test_round_trip(Transit.TSet([1,2,3]))
+
+@test test_round_trip(Transit.TSet(Any[Transit.TSet([1,2]), Transit.TSet([2,3])]))
 end
