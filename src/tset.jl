@@ -20,8 +20,12 @@ in(x, s::TSet) = haskey(s.dict, (x, typeof(x)))
 ==(s::TSet, t::TSet) = ==(s.dict, t.dict)
 length(s::TSet) = length(s.dict)
 start(s::TSet) = start(s.dict)
+function next(s::TSet, x::Any)
+    nextdict = next(s.dict, x)
+    return (nextdict[1][2], nextdict[2])
+end
+
 done(s::TSet, state::Any) = done(s.dict, state)
-next(s::TSet, x::Any) = next(s.dict, x)
 enumerate(s::TSet) = enumerate(values(s.dict))
 string(s::TSet) = "TSet($(join(map(string,(values(s.dict))), ",")))"
 
