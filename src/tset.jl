@@ -6,15 +6,17 @@ import Base.done
 import Base.next
 import Base.string
 import Base.enumerate
+import Base.isequal
+
 
 immutable TSet
-    dict::Dict{Array{Any},Any}
+    dict::Dict{Tuple{Any,DataType},Any}
 
-    TSet() = new(Dict{Array{Any},Any}())
-    TSet(itr) = new([Any[x, typeof(x)] => x for x in itr])
+    TSet() = new(Dict{Tuple{Any,DataType},Any}())
+    TSet(itr) = new([(x, typeof(x)) => x for x in itr])
 end
 
-in(x, s::TSet) = haskey(s.dict, Any[x, typeof(x)])
+in(x, s::TSet) = haskey(s.dict, (x, typeof(x)))
 ==(s::TSet, t::TSet) = ==(s.dict, t.dict)
 length(s::TSet) = length(s.dict)
 start(s::TSet) = start(s.dict)
