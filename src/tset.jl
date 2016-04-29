@@ -4,6 +4,7 @@ import Base.length
 import Base.start
 import Base.done
 import Base.next
+import Base.string
 import Base.enumerate
 
 immutable TSet
@@ -20,3 +21,4 @@ start(s::TSet) = start(s.dict)
 done(s::TSet, state::Any) = done(s.dict, state)
 next(s::TSet, x::Any) = next(s.dict, x)
 enumerate(s::TSet) = enumerate(values(s.dict))
+string(s::TSet) = "TSet($(join(map(string,(values(s.dict))), ",")))"
