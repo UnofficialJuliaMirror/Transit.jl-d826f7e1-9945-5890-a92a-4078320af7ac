@@ -22,3 +22,13 @@ done(s::TSet, state::Any) = done(s.dict, state)
 next(s::TSet, x::Any) = next(s.dict, x)
 enumerate(s::TSet) = enumerate(values(s.dict))
 string(s::TSet) = "TSet($(join(map(string,(values(s.dict))), ",")))"
+
+
+const hashs_seed = UInt === UInt64 ? 0x852ada37cfe8e0ce : 0xcfe8e0ce
+function hash(s::TSet, h::UInt)
+    h = hash(hashs_seed, h)
+    for x in s
+        h $= hash(x)
+    end
+    return h
+end
