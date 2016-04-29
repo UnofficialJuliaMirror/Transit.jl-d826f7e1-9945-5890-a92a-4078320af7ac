@@ -15,7 +15,7 @@ type Decoder
                         "n"  => (x -> Base.parse(BigInt, x)),
                         "u"  => (x -> Base.Random.UUID(x)), # only string case so far
                         "t"  => (x -> Date(x, Dates.DateFormat("y-m-dTH:M:S.s"))),
-                        "m"  => (x -> Base.Dates.UTInstant(Dates.Millisecond(Base.parse(x)))), # maybe not sufficient
+                        "m"  => (x -> Dates.unix2datetime(trunc(Base.parse(Float64, x) / 1000.))), # maybe not sufficient
                         "z"  => (x -> if (x == "NaN")
                                           NaN
                                       elseif (x == "INF")
