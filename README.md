@@ -35,7 +35,7 @@ Really this is all TBD at this point.
 
 | Semantic Type | write accepts | read produces |
 |:--------------|:--------------|:--------------|
-| null| anything of type Void | Void() |
+| null| anything of type Void | nothing |
 | string| string | string |
 | boolean | Bool | Bool |
 | integer, signed 64 bit| any signed or unsiged int type | Int64 |
@@ -45,15 +45,15 @@ Really this is all TBD at this point.
 | symbol | Transit.TSymbol | Transit.TSymbol
 | arbitrary precision decimal| BigFloat | BigFloat |
 | arbitrary precision integer| BigInt | BigInt |
-| point in time | TBD | TBD |
-| point in time RFC 33339 | TBD | TBD |
+| point in time | DateTime | DateTime |
+| point in time RFC 33339 | Date | Date |
 | uuid | Base.Random.UUID| Base.Random.UUID|
 | uri | Transit.TURI | Transit.TURI |
 | char | Char | Char |
 | special numbers | Inf, Nan| Inf, Nan
 | array | arrays | Any[] |
 | map | Dict | Dict{Any,Any} | 
-| set |  Set | Set{Any} |
+| set |  Transit.TSet, Set | Transit.TSet |
 | list | DataStructures.Cons | DataStructures.Cons |
 | map w/ composite keys |  Dict{Array,Any} |  Dict{Array,Any} |
 | link | Transit.TLink | Transit.TLink |

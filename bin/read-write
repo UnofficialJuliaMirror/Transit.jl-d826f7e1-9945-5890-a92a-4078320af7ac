@@ -1,0 +1,12 @@
+#!/usr/bin/env julia
+include("../src/Transit.jl")
+import Transit
+
+e = Transit.Encoder(STDOUT)
+
+# not yet working
+while true
+    parsed = Transit.parse(readall(STDIN))
+    Transit.encode(e, parsed)
+    flush(STDOUT)
+end
