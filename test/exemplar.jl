@@ -8,6 +8,7 @@ import JSON
 import Transit
 import Transit.TSymbol
 import Transit.TSet
+import Transit.TaggedValue
 
 
 function range_centered_on(n)
@@ -166,7 +167,7 @@ exemplars = [
 
     Exemplar( "one_uri", "A single URI", first(uris)),
 
-    ###Exemplar( "uris", "A vector of URIs", uris),
+    Exemplar( "uris", "A vector of URIs", uris),
 
 
     Exemplar(
@@ -277,12 +278,12 @@ exemplars = [
        dict_of("aaaa", 3, "bbbb", 4),
        dict_of("aaaa", 5, "bbbb", 6)]),
 
-###    Exemplar(
-###      "maps_unrecognized_keys",
-###      "Vector of maps with keys with unrecognized encodings",
-###      [(t/tagged-value "abcde", :anything),
-###       (t/tagged-value "fghij", :anything-else)]),
-###
+    Exemplar(
+      "maps_unrecognized_keys",
+      "Vector of maps with keys with unrecognized encodings",
+      [TaggedValue("abcde", :anything),
+       TaggedValue("fghij", Symbol("anything-else"))]),
+
     Exemplar( "map_unrecognized_vals", "Map with vals with unrecognized encodings",
               dict_of(:key, "~Unrecognized")),
 
@@ -308,11 +309,11 @@ exemplars = [
 
     Exemplar( "vector_special_numbers", "Vector with special numbers", Any[NaN, Inf, -Inf]),
 
-###    Exemplar(
-###      "cmap_pathological",
-###      "cmap pathological case discovered in transit-js and transit-cljs",
-###      [{:any-value {["this vector makes this a cmap"] "any value", "any string", :victim}}
-###       {:victim :any-other-value}])
+    Exemplar(
+      "cmap_pathological",
+      "cmap pathological case discovered in transit-js and transit-cljs",
+      Any[Dict(Symbol("any-value") => Dict(Any["this vector makes this a cmap"] => "any value", "any string" => :victim)),
+          Dict(:victim => Symbol("any-other-value"))])
 ]
 
 function issame(x::Any, y::Any)
@@ -353,10 +354,6 @@ function issame(x::Array, y::Array)
     false
   elseif length(x) == 0
     true
-  elseif !issame(x[1], y[1])
-    false
-  elseif x[1] == "^ " || x[1] == "~#cmap" || x[1] == "~#set"
-    issame(TSet(x), TSet(y))
   else
     for i in 1:length(x)
         if !issame(x[i], y[i])
@@ -376,22 +373,11 @@ function findsame(x, col)
     false
 end
 
-function test_writing(e::Exemplar)
-  path = "../transit-format/examples/0.8/simple/$(e.file_name).json"
-  expected = JSON.parse(open(path))
-  actual = JSON.parse(Transit.to_transit(e.value))
-  if !issame(expected, actual)
-      println("WRITE: $(e.file_name): Expected $expected $(typeof(expected)) but got $actual $(typeof(actual))")
-      return false
-  end
-  true
-end
-
 function test_reading(e::Exemplar)
   path = "../transit-format/examples/0.8/simple/$(e.file_name).json"
   actual = Transit.parse(open(path))
   if !issame(e.value, actual)
-      println("READ: $(e.file_name): Expected $(e.value) $(typeof(e.value)) but got $actual $(typeof(actual))")
+      println("\nREAD: $(e.file_name): Expected:\n$(e.value)\nBut got:\n$actual")
       return false
   end
   true
@@ -401,7 +387,6 @@ function test_exemplars()
     failures = 0
     for e in exemplars
       failures = test_reading(e) ? failures : failures + 1
-      #failures = test_writing(e) ? failures : failures + 1
     end
 
     if failures > 0
