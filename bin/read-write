@@ -1,8 +1,16 @@
 #!/usr/bin/env julia
+
+# works in that command:
+# echo "[\"~#'\",\"~zNaN\"][\"~#'\",\"~zNaN\"]"  && echo "[\"~#'\",\"~zNaN\"] [\"~#'\",\"~zNaN\"]" | bin/read-write && echo
+# returns ["~#'","~zNaN"]["~#'","~zNaN"]
+# but this while True loop  should lazily realize values from the IO stream,
+# with a generator or callback on IO or something.
+
 include("../src/Transit.jl")
 import Transit
 
-e = Transit.Encoder(STDOUT)
+e = Transit.Encoder(STDOUT, false)
+
 
 # not yet working
 while true
