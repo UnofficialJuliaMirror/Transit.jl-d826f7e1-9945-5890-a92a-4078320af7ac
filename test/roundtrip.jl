@@ -10,7 +10,6 @@ import DataStructures.list
 # back in the resulting JSON. Not a round trip, since
 # we are just reading back in the raw JSON.
 function round_trip(x, verbose=false)
-    println("test roudn trip: $x")
     buf = IOBuffer()
     e = Transit.write(buf, x)
     s = takebuf_string(buf)
@@ -19,7 +18,6 @@ end
 
 function test_round_trip(value, verbose=false)
     x = round_trip(value, verbose)
-    println("value returned is $x")
     x == value
 end
 
