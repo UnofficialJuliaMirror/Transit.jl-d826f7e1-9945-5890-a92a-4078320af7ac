@@ -11,10 +11,20 @@ import Transit
 
 e = Transit.Encoder(STDOUT, false)
 
+function read_loop()
+    while true
+        produce(Transit.parse(readline(STDIN)))
+    end
+end
 
-# not yet working
-while true
-    parsed = Transit.parse(readall(STDIN))
-    Transit.encode(e, parsed)
-    flush(STDOUT)
+function write_loop(reader::Task)
+    for parsed in reader
+        Transit.encode(e, parsed)
+        flush(STDOUT)
+    end
+end
+
+@sync begin
+    a = @async read_loop()
+    @async write_loop(a)
 end
