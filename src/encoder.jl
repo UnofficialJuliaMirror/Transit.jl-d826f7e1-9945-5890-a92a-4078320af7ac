@@ -4,7 +4,7 @@ type Encoder
     encodes_to_string
     emitter::Emitter
 
-    Encoder(io, verbose) =
+    Encoder(io, verbose=false) =
 		new(verbose,
 		    Dict{DataType,Function}(),
 		    Dict{DataType,Bool}(),
