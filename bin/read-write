@@ -12,7 +12,7 @@ import Transit
 e = Transit.Encoder(STDOUT, false)
 
 function read_loop()
-    while true
+    while !eof(STDIN)
         produce(Transit.parse(readline(STDIN)))
     end
 end
