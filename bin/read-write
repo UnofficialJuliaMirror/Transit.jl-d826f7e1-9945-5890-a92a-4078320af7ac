@@ -19,8 +19,10 @@ end
 
 function write_loop(reader::Task)
     for parsed in reader
-        Transit.encode(e, parsed)
-        flush(STDOUT)
+        if parsed != nothing
+            Transit.write(STDOUT, parsed)
+            flush(STDOUT)
+        end
     end
 end
 
