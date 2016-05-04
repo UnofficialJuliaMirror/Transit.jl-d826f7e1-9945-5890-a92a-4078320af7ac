@@ -13,7 +13,7 @@ e = Transit.Encoder(STDOUT, false)
 
 function read_loop()
     while !eof(STDIN)
-        produce(Transit.parse(readline(STDIN)))
+        produce(Transit.parse(STDIN))
     end
 end
 
