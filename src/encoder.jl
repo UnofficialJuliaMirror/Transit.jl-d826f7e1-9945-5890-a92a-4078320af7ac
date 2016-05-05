@@ -265,7 +265,7 @@ end
 
 function encode_value(e::Encoder, x::TaggedValue, askey::Bool)
     emit_array_start(e.emitter)
-    emit_tag(e.emitter, x.tag)
+    emit_tag(e.emitter, "#$(x.tag)")
     emit_array_sep(e.emitter)
     encode(e, x.value, false)
     emit_array_end(e.emitter)
@@ -308,7 +308,7 @@ function encode_cmap(e::Encoder, x::Dict)
     for (k, v) in x
         emit_array_sep(e.emitter, i)
 	i = i + 1
-        encode_value(e, k, true)
+        encode_value(e, k, false)
         emit_array_sep(e.emitter)
         encode_value(e, v, false)
     end
