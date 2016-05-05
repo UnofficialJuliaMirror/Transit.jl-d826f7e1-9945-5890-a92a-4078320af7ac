@@ -42,7 +42,7 @@
   end
 
   function emit_array_end(e::Emitter)
-    print(e.io, "] ")
+    print(e.io, "]")
   end
 
   function emit_map_start(e::Emitter)
@@ -63,6 +63,6 @@
 
   function emit_array_sep(e::Emitter, i=2)
     if i != 1
-      print(e.io, ", ")
+      print(e.io, ",")
     end
   end
