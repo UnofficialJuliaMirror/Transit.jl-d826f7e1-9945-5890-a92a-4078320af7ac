@@ -144,7 +144,7 @@ end
 function encode_value(e::Encoder, x::BigFloat, askey::Bool)
     if !encode_special_float(e.emitter, x, askey)
         let s = string(x)
-            emit(e.emitter, "~z$s", askey)
+            emit(e.emitter, "~f$s", askey)
         end
     end
 end
@@ -196,7 +196,7 @@ function encodes_to_string(e::Encoder, x::Rational)
 end
 
 function encode_value(e::Encoder, x::DateTime, askey::Bool)
-    let millis = trunc(Int64, Dates.datetime2unix(x)) * 1000
+    let millis = trunc(Int64, Dates.datetime2unix(x) * 1000)
         emit(e.emitter, "~m$millis", askey)
     end
 end

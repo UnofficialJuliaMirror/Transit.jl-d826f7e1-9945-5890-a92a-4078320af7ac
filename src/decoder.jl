@@ -5,7 +5,7 @@ type Decoder
                         "_"  => (x -> nothing),
                         ":"  => (x -> symbol(x)),
                         "\$" => (x -> TSymbol(x)),
-                        "?"  => (x -> true ? x : false),
+                        "?"  => (x -> x == "t"),
                         "b"  => (x -> base64decode(x)),
                         "c"  => (x -> x[1]),
                         "i"  => (x -> Base.parse(Int64, x)),
@@ -15,7 +15,7 @@ type Decoder
                         "n"  => (x -> Base.parse(BigInt, x)),
                         "u"  => (x -> Base.Random.UUID(x)), # only string case so far
                         "t"  => (x -> Date(x, Dates.DateFormat("y-m-dTH:M:S.s"))),
-                        "m"  => (x -> Dates.unix2datetime(trunc(Base.parse(Float64, x) / 1000.))), # maybe not sufficient
+                        "m"  => (x -> Dates.unix2datetime(Base.parse(Float64, x) / 1000.)), # maybe not sufficient
                         "z"  => (x -> if (x == "NaN")
                                           NaN
                                       elseif (x == "INF")
@@ -116,7 +116,12 @@ function decode_value(e::Decoder, s::AbstractString, cache::Cache, as_map_key::B
         s[2:end]
     elseif startswith(s, ESC)
         #2:2 is necessary to get str instead of char
-        e[s[2:2]](s[3:end])
+        tag = s[2:2]
+        if haskey(e.decoderFunctions, tag)
+            e[tag](s[3:end])
+        else
+	    TaggedValue(tag, s[3:end])
+        end
     end
 end
 
