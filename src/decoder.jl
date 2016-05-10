@@ -14,7 +14,7 @@ type Decoder
                         "r"  => (x -> TURI(x)),
                         "n"  => (x -> Base.parse(BigInt, x)),
                         "u"  => (x -> Base.Random.UUID(x)), # only string case so far
-                        "t"  => (x -> Date(x, Dates.DateFormat("y-m-dTH:M:S.s"))),
+                        "t"  => parsedatetime,
                         "m"  => (x -> Dates.unix2datetime(Base.parse(Float64, x) / 1000.)), # maybe not sufficient
                         "z"  => (x -> if (x == "NaN")
                                           NaN
@@ -80,6 +80,7 @@ end
 
 
 function decode_value(e::Decoder, hash::Dict, cache::Cache, as_map_key::Bool=false)
+
     if length(hash) != 1
         h = Dict{Any,Any}()
         for kv in hash
