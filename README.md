@@ -43,7 +43,7 @@ Really this is all TBD at this point.
 | bytes| Array{Int8} | Array{Int8} |
 | keyword | Symbol | Symbol |
 | symbol | Transit.TSymbol | Transit.TSymbol
-| arbitrary precision decimal| BigFloat | BigFloat |
+| arbitrary precision decimal| Decimals.Decimal, BigFloat | Decimals.Decimal|
 | arbitrary precision integer| BigInt | BigInt |
 | point in time | DateTime | DateTime |
 | point in time RFC 33339 | Date | Date |

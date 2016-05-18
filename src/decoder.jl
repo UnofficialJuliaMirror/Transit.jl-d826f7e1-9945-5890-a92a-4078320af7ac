@@ -10,7 +10,7 @@ type Decoder
                         "c"  => (x -> x[1]),
                         "i"  => (x -> Base.parse(Int64, x)),
                         "d"  => (x -> Base.parse(Float64, x)),
-                        "f"  => (x -> Base.parse(BigFloat, x)),
+                        "f"  => (x -> decimal(lowercase(x))),
                         "r"  => (x -> TURI(x)),
                         "n"  => (x -> Base.parse(BigInt, x)),
                         "u"  => (x -> Base.Random.UUID(x)), # only string case so far

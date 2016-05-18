@@ -141,6 +141,12 @@ function encode_special_float(emitter::Emitter, x::AbstractFloat, askey::Bool)
     return true
 end
 
+function encode_value(e::Encoder, x::Decimal, askey::Bool)
+    let s = string(x)
+        emit(e.emitter, "~f$s", askey)
+    end
+end
+
 function encode_value(e::Encoder, x::BigFloat, askey::Bool)
     if !encode_special_float(e.emitter, x, askey)
         let s = string(x)
@@ -152,7 +158,7 @@ end
 function encode_value(e::Encoder, x::AbstractFloat, askey::Bool)
     if !encode_special_float(e.emitter, x, askey)
         if askey
-             emit(e.emitter, "~f$x", askey)
+             emit(e.emitter, "~d$x", askey)
          else
              emit_raw(e.emitter, string(x))
          end

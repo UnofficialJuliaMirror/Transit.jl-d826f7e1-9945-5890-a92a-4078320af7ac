@@ -5,6 +5,7 @@ module Transit
 
   using DataStructures
   using URIParser
+  using Decimals
 
   export Encoder, encode, parse, decode
 

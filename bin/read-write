@@ -8,6 +8,7 @@ include("../src/Transit.jl")
 import Transit
 
 debug = false
+#debug = true
 
 if debug
     log_f = open("/tmp/log.txt", "w")
