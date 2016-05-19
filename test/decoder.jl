@@ -29,7 +29,7 @@ end
 @test square_trip([Dict{Any,Any}("~:b" => "~i3"), "~i2"]) == [Dict{Any,Any}(:b => 3), 2]
 @test square_trip(["~zINF", "~z-INF"]) == [Inf, -Inf]
 @test isnan(square_trip(["~zNaN"])[1])
-@test square_trip(["~f3.14"])[1] - 3.14 <= 0.000001
+@test square_trip(["~f3.14"])[1] == Decimals.decimal("3.14")
 @test square_trip(["~ude305d54-75b4-431b-adb2-eb6b9e546014"]) == [Base.Random.UUID("de305d54-75b4-431b-adb2-eb6b9e546014")]
 @test square_trip(["~'ok"]) == ["ok"]
 @test square_trip(["~_"]) == [nothing]
