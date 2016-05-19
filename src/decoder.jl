@@ -3,10 +3,10 @@ type Decoder
 
     Decoder() = new(Dict{ASCIIString,Function}(
                         "_"  => (x -> nothing),
-                        ":"  => (x -> symbol(x)),
+                        ":"  => symbol,
                         "\$" => (x -> TSymbol(x)),
                         "?"  => (x -> x == "t"),
-                        "b"  => (x -> base64decode(x)),
+                        "b"  => base64decode,
                         "c"  => (x -> x[1]),
                         "i"  => (x -> Base.parse(Int64, x)),
                         "d"  => (x -> Base.parse(Float64, x)),
