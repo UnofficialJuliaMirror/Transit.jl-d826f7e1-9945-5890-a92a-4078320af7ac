@@ -1,4 +1,4 @@
-julia 0.4
+julia 0.4.3
 JSON 0.5.0
 URIParser 0.0.5
 Decimals 0.1.0
