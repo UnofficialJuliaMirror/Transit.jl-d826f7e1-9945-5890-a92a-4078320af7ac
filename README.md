@@ -26,20 +26,22 @@ Transit will read or write data using any IO interface in Julia that is supporte
 by the JSON package. To write:
 
 ```julia
-Transit.write(STDOUT, [:value, 0, nothing])
+Transit.write(STDOUT, [123, "hello world", :value, 0, nothing])
 # ["~:value",0,null]
 ```
 
 To read:
 
 ```julia
-iobuf = IOBuffer("[\"~:value\",0,null]")
+iobuf = IOBuffer("[123, \"hello world\", \"~:value\",0,null]")
 Transit.parse(iobuf)
 
-# 3-element Array{Any,1}:
-#   :value
-#   0
-#   nothing
+# 5-element Array{Any,1}:
+#   123             
+#   "hello world"
+#   :value       
+#  0             
+#   nothing  
 ```
 
 ## Default Type Mapping
