@@ -1,6 +1,4 @@
-# transit-julia
-
-Note that transit-julia is still under active development and is *not* ready for use.
+# Transit.jl
 
 Transit is a data format and a set of libraries for conveying values between applications written in different languages. This library provides support for marshalling Transit data to/from [Julia](http://julialang.org).
 
@@ -14,24 +12,40 @@ MessagePack is **not** implemented yet.
 
 _NOTE: Transit is a work in progress and may evolve based on feedback. As a result, while Transit is a great option for transferring data between applications, it should not yet be used for storing data durably over time. This recommendation will change when the specification is complete._
 
+## Installation
+
+Transit is available in Julia's METADATA.jl package repository:
+
+```julia
+Pkg.add("Transit")
+```
+
 ## Usage
 
-Reading data with transit-julia involves...
+Transit will read or write data using any IO interface in Julia that is supported
+by the JSON package. To write:
 
 ```julia
-TBD
+Transit.write(STDOUT, [:value, 0, nothing])
+# ["~:value",0,null]
 ```
 
-Writing is similar:
+To read:
 
 ```julia
-TBD
-```
+iobuf = IOBuffer("[\"~:value\",0,null]")
+Transit.parse(iobuf)
 
+# 3-element Array{Any,1}:
+#   :value
+#   0
+#   nothing
+```
 
 ## Default Type Mapping
 
-Really this is all TBD at this point.
+_NOTE: The type mapping may change in the short term for Transit.jl if any types proves to be a mismatch with typical Julia expectations._
+
 
 | Semantic Type | write accepts | read produces |
 |:--------------|:--------------|:--------------|
