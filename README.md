@@ -22,12 +22,18 @@ Pkg.add("Transit")
 
 ## Usage
 
+To use Transit in a project, import it:
+
+```julia
+import Transit
+```
+
 Transit will read or write data using any IO interface in Julia that is supported
 by the JSON package. To write:
 
 ```julia
 Transit.write(STDOUT, [123, "hello world", :value, 0, nothing])
-# ["~:value",0,null]
+# [123,"hello world","~:value",0,null]
 ```
 
 To read:
@@ -40,7 +46,7 @@ Transit.parse(iobuf)
 #   123             
 #   "hello world"
 #   :value       
-#  0             
+#   0             
 #   nothing  
 ```
 
