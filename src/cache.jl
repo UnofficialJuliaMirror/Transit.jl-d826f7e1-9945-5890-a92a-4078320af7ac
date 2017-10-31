@@ -1,7 +1,8 @@
-abstract Cache
+abstract type Cache
+end
 
 # Do nothing cache used in verbose mode.
-type NoopCache <: Cache
+mutable struct NoopCache <: Cache
 end
 
 function write!(rc::NoopCache, name::AbstractString)
@@ -9,11 +10,11 @@ function write!(rc::NoopCache, name::AbstractString)
 end
 
 # Real caching.
-type RollingCache <: Cache
-    key_to_value::Dict{ASCIIString,Any}
-    value_to_key::Dict{Any,ASCIIString}
+mutable struct RollingCache <: Cache
+    key_to_value::Dict{AbstractString,Any}
+    value_to_key::Dict{Any,AbstractString}
 
-    RollingCache() = new(Dict{ASCIIString,Any}(), Dict{Any,ASCIIString}())
+    RollingCache() = new(Dict{AbstractString,Any}(), Dict{Any,AbstractString}())
 end
 
 const FIRST_ORD = 48
