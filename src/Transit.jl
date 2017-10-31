@@ -8,7 +8,8 @@ using DataStructures
 using URIParser
 using Decimals
 
-export parse, write
+export parse, write,  # intended public use
+       Decoder, Encoder, decode, encode  # used by tests
 
 include("tagged_value.jl")
 include("tsymbol.jl")
