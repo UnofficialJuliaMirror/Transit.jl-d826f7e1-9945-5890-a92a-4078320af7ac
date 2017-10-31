@@ -1,4 +1,4 @@
-type Link
+struct Link
     href::URI
     rel::AbstractString
     name::AbstractString

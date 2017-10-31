@@ -1,6 +1,6 @@
   import JSON
 
-  type Emitter
+  mutable struct Emitter
     io::IO
     cache::Cache
   end

@@ -1,4 +1,4 @@
-type Encoder
+mutable struct Encoder
     verbose::Bool
     encoder_functions
     encodes_to_string
@@ -50,7 +50,7 @@ function encode_top_level(e::Encoder, x::Any)
     if encodes_to_string(e, x)
         encode_quoted(e, x)
     else
-        encode(e, x, false) 
+        encode(e, x, false)
     end
 end
 
@@ -178,7 +178,7 @@ function encode_tagged_enumerable(e::Encoder, tag::AbstractString, iter)
     emit_array_sep(e.emitter)
 
     emit_array_start(e.emitter)
-    encode_iterator(e, iter) 
+    encode_iterator(e, iter)
     emit_array_end(e.emitter)
     emit_array_end(e.emitter)
 end

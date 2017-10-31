@@ -1,8 +1,8 @@
-immutable Tag
+struct Tag
     rep::AbstractString
 end
 
-type TaggedValue
+mutable struct TaggedValue
     tag::AbstractString
     value::Any
 end
@@ -17,8 +17,8 @@ const hashttaggedvalue_seed = UInt === UInt64 ? 0x8ee14727cfcae1ce : 0x1f487ece
 
 function hash(tv::TaggedValue, h::UInt)
     h = hash(hashttaggedvalue_seed, h)
-    h $= hash(tv.tag)
-    h $= hash(tv.value)
+    h ⊻= hash(tv.tag)
+    h ⊻= hash(tv.value)
     return h
 end
 

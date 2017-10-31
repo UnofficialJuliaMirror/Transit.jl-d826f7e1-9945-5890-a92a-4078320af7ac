@@ -1,4 +1,4 @@
-type TURI
+struct TURI
     value::AbstractString
 end
 
