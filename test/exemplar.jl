@@ -2,13 +2,16 @@ include("../src/Transit.jl")
 module TestTransit
 
 using Base.Test
-using DataStructures  
+using DataStructures
 
 import JSON
 import Transit
 import Transit.TSymbol
 import Transit.TSet
 import Transit.TaggedValue
+
+import Base.Iterators.take
+import Base.Iterators.cycle
 
 
 function range_centered_on(n)
@@ -44,13 +47,7 @@ function dict_of(a...)
   keys = a[1:2:length(a)]
   vals = a[2:2:length(a)]
 
-  result = Dict{Any,Any}()
-
-  for i in 1:length(keys)
-    result[keys[i]] = vals[i]
-  end
-
-  result
+  Dict{Any,Any}(zip(keys, vals))
 end
 
 function nested_dict(n)
@@ -60,7 +57,7 @@ end
 function nested_dict_exemplar(n)
     Exemplar("map_$(n)_nested", "Map of two nested $n maps", nested_dict(n))
 end
- 
+
 map_simple = Dict{Any,Any}(:a => 1, :b => 2, :c => 3)
 
 map_mixed = Dict{Any,Any}(:a => 1, :b => "a string", :c => true)
@@ -69,7 +66,7 @@ map_nested = Dict{Any,Any}(:simple => map_simple, :mixed => map_mixed)
 
 vector_simple  = Any[1, 2, 3]
 
-vector_mixed  = Any[0, 1, 2.0, true, false, UTF8String("five"), :six, TSymbol(:seven), UTF8String("~eight"), nothing]
+vector_mixed  = Any[0, 1, 2.0, true, false, "five", :six, TSymbol(:seven), "~eight", nothing]
 
 vector_nested = Any[vector_simple, vector_mixed]
 
@@ -134,7 +131,7 @@ exemplars = [
 
     Exemplar( "small_strings", "A vector of small strings", small_strings),
 
-    Exemplar( "strings_tilde", "A vector of strings starting with ~", 
+    Exemplar( "strings_tilde", "A vector of strings starting with ~",
 	      map(x -> "~$x", small_strings)),
 
     Exemplar( "strings_hash", "A vector of strings starting with #",
@@ -180,7 +177,7 @@ exemplars = [
 
     Exemplar( "list_simple", "A simple list", list_of(vector_simple)),
     Exemplar( "list_empty", "An empty list", list()),
-    Exemplar( "list_mixed", "A ten element list with mixed values", 
+    Exemplar( "list_mixed", "A ten element list with mixed values",
 	      list_of(vector_mixed)),
 
     Exemplar( "list_nested", "Two lists nested inside an outter list",
@@ -196,7 +193,7 @@ exemplars = [
     Exemplar( "map_mixed", "A mixed map", map_mixed),
     Exemplar( "map_nested", "A nested map", map_nested),
 
-    Exemplar( "map_string_keys", "A map with string keys", 
+    Exemplar( "map_string_keys", "A map with string keys",
               dict_of("first", 1, "second", 2, "third", 3)),
 
     Exemplar( "map_numeric_keys", "A map with numeric keys",
