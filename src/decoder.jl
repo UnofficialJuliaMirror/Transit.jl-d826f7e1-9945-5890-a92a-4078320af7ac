@@ -1,9 +1,9 @@
-type Decoder
-    decoderFunctions
+mutable struct Decoder
+    decoderFunctions::Dict{AbstractString,Function}
 
-    Decoder() = new(Dict{ASCIIString,Function}(
+    Decoder() = new(Dict{AbstractString,Function}(
                         "_"  => (x -> nothing),
-                        ":"  => symbol,
+                        ":"  => (x -> Symbol(x)),
                         "\$" => (x -> TSymbol(x)),
                         "?"  => (x -> x == "t"),
                         "b"  => base64decode,
@@ -32,8 +32,7 @@ type Decoder
                         "link" => (x -> Link(x...)),
                         "list" => tolist,
                         "ratio" => (x -> x[1]//x[2]),
-                        "cmap" => (x -> [a[1] => a[2]
-                                         for a in zip(x[1:2:end], x[2:2:end])])
+                        "cmap" => (x -> Dict{Any, Any}(a[1] => a[2] for a in zip(x[1:2:end], x[2:2:end])))
                     ))
 end
 
