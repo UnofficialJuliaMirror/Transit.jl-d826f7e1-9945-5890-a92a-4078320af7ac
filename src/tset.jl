@@ -10,7 +10,6 @@ import Base.enumerate
 import Base.isequal
 import Base.print
 import Base.println
-import Base.display
 
 
 immutable TSet
@@ -33,7 +32,6 @@ done(s::TSet, state::Any) = done(s.dict, state)
 enumerate(s::TSet) = enumerate(values(s.dict))
 string(s::TSet) = "TSet($(join(map(string, [a for a in s]), ",")))"
 show(s::TSet) = println(string(s))
-display(s::TSet) = println(string(s))
 print(io::IO, s::TSet) = print(io, string(s))
 
 
