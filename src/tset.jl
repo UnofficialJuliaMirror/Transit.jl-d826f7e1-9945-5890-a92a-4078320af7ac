@@ -12,11 +12,11 @@ import Base.print
 import Base.println
 
 
-immutable TSet
-    dict::Dict{Tuple{Any,DataType},Any}
+struct TSet
+    dict #::Dict{Tuple{Any,DataType},Any}
 
     TSet() = new(Dict{Tuple{Any,DataType},Any}())
-    TSet(itr) = new([(x, typeof(x)) => x for x in itr])
+    TSet(itr) = new(Dict((x, typeof(x)) => x for x in itr))
 end
 
 in(x, s::TSet) = haskey(s.dict, (x, typeof(x)))
@@ -39,7 +39,7 @@ const hashtset_seed = UInt === UInt64 ? 0x852ada37cfe8e0ce : 0xcfe8e0ce
 function hash(s::TSet, h::UInt)
     h = hash(hashtset_seed, h)
     for x in s
-        h $= hash(x)
+        h ⊻= hash(x)
     end
     return h
 end
