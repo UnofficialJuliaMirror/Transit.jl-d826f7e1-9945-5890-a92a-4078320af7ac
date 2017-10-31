@@ -69,7 +69,7 @@ map_nested = Dict{Any,Any}(:simple => map_simple, :mixed => map_mixed)
 
 vector_simple  = Any[1, 2, 3]
 
-vector_mixed  = Any[0, 1, 2.0, true, false, "five", :six, TSymbol(:seven), "~eight", nothing]
+vector_mixed  = Any[0, 1, 2.0, true, false, UTF8String("five"), :six, TSymbol(:seven), UTF8String("~eight"), nothing]
 
 vector_nested = Any[vector_simple, vector_mixed]
 
