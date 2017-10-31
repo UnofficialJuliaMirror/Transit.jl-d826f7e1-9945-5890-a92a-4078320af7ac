@@ -13,7 +13,7 @@ import Base.println
 
 
 struct TSet
-    dict #::Dict{Tuple{Any,DataType},Any}
+    dict
 
     TSet() = new(Dict{Tuple{Any,DataType},Any}())
     TSet(itr) = new(Dict((x, typeof(x)) => x for x in itr))
