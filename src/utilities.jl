@@ -22,7 +22,7 @@ function tolist(a::AbstractArray)
 end
 
 
-date_formats = ["yyyy-mm-ddTHH:MM:SS.sss", "yyyy-mm-ddTHH:MM:SS"]
+date_formats = ("yyyy-mm-ddTHH:MM:SS.sss", "yyyy-mm-ddTHH:MM:SS")
 
 function parsedatetime(s::AbstractString)
     s = replace(s, r"Z$", "")
