@@ -108,7 +108,7 @@ symbols = map(x->TSymbol(x), keywords)
 
 dates =  map(x-> Dates.unix2datetime(x), [-6106017600, 0, 946728000, 1396909037])
 
-immutable Exemplar
+struct Exemplar
   file_name::AbstractString
   description::AbstractString
   value::Any
