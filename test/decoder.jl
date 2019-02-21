@@ -1,7 +1,4 @@
-include("../src/Transit.jl")
-module TestDecoder
-
-using Base.Test
+using Test
 using Transit
 using JSON
 using Decimals
@@ -32,7 +29,7 @@ end
 @test square_trip(["~zINF", "~z-INF"]) == [Inf, -Inf]
 @test isnan(square_trip(["~zNaN"])[1])
 @test square_trip(["~f3.14"])[1] == Decimals.decimal("3.14")
-@test square_trip(["~ude305d54-75b4-431b-adb2-eb6b9e546014"]) == [Base.Random.UUID("de305d54-75b4-431b-adb2-eb6b9e546014")]
+@test square_trip(["~ude305d54-75b4-431b-adb2-eb6b9e546014"]) == [Base.UUID("de305d54-75b4-431b-adb2-eb6b9e546014")]
 @test square_trip(["~'ok"]) == ["ok"]
 @test square_trip(["~_"]) == [nothing]
 # fix for list change
@@ -42,5 +39,3 @@ end
 # fix for URI change
 #@test square_trip(Any["~rhttp://example.com","~rftp://example.com"]) == Any[URIParser.URI("http://example.com"), URIParser.URI("ftp://example.com")]
 #@test square_trip(["~m-6106017600000","~m0","~m946728000000","~m1396909037000"]) == TBD - what do you typically want?
-
-end

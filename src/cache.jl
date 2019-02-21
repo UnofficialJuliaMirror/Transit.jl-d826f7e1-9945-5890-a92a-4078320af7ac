@@ -53,11 +53,11 @@ function clear!(rc::RollingCache)
 end
 
 function iscachekey(str::AbstractString)
-    startswith(str, SUB) && str != MAP_AS_ARRAY
+    multi_startswith(str, SUB) && str != MAP_AS_ARRAY
 end
 
 function iscacheable(str::AbstractString, key=false)
-    length(str) >= MIN_SIZE_CACHEABLE && (key || startswith(str, "~#","~\$","~\:"))
+    length(str) >= MIN_SIZE_CACHEABLE && (key || multi_startswith(str, "~#","~\$","~:"))
 end
 
 function clear!(rc::RollingCache)

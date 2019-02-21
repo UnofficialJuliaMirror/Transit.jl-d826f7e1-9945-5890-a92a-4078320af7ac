@@ -8,7 +8,7 @@ Transit is a data format and a set of libraries for conveying values between app
 This implementation's major.minor version number corresponds to the version of the Transit specification it supports.
 
 Currently only the JSON formats are implemented.
-MessagePack is **not** implemented yet. 
+MessagePack is **not** implemented yet.
 
 _NOTE: Transit is a work in progress and may evolve based on feedback. As a result, while Transit is a great option for transferring data between applications, it should not yet be used for storing data durably over time. This recommendation will change when the specification is complete._
 
@@ -43,11 +43,11 @@ iobuf = IOBuffer("[123, \"hello world\", \"~:value\",0,null]")
 Transit.parse(iobuf)
 
 # 5-element Array{Any,1}:
-#   123             
+#   123
 #   "hello world"
-#   :value       
-#   0             
-#   nothing  
+#   :value
+#   0
+#   nothing
 ```
 
 ## Default Type Mapping
@@ -57,7 +57,7 @@ _NOTE: The type mapping may change in the short term for Transit.jl if any types
 
 | Semantic Type | write accepts | read produces |
 |:--------------|:--------------|:--------------|
-| null| anything of type Void | nothing |
+| null| anything of type Nothing | nothing |
 | string| string | string |
 | boolean | Bool | Bool |
 | integer, signed 64 bit| any signed or unsiged int type | Int64 |
@@ -69,12 +69,12 @@ _NOTE: The type mapping may change in the short term for Transit.jl if any types
 | arbitrary precision integer| BigInt | BigInt |
 | point in time | DateTime | DateTime |
 | point in time RFC 33339 | Date | Date |
-| uuid | Base.Random.UUID| Base.Random.UUID|
+| uuid | Base.UUID| Base.UUID|
 | uri | Transit.TURI | Transit.TURI |
 | char | Char | Char |
 | special numbers | Inf, Nan| Inf, Nan
 | array | arrays | Any[] |
-| map | Dict | Dict{Any,Any} | 
+| map | Dict | Dict{Any,Any} |
 | set |  Transit.TSet, Set | Transit.TSet |
 | list | DataStructures.Cons | DataStructures.Cons |
 | map w/ composite keys |  Dict{Array,Any} |  Dict{Array,Any} |

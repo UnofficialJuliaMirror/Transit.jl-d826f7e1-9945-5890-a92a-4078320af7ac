@@ -1,7 +1,4 @@
-include("../src/Transit.jl")
-module TestTransit
-
-using Base.Test
+using Test
 using DataStructures
 
 import JSON
@@ -91,10 +88,10 @@ powers_two =
 
 interesting_ints = foldl(vcat, [], map(x-> Array(range_centered_on(x, 2)), powers_two))
 
-uuids = [Base.Random.UUID( "5a2cbea3-e8c6-428b-b525-21239370dd55"),
-         Base.Random.UUID( "d1dc64fa-da79-444b-9fa4-d4412f427289"),
-         Base.Random.UUID( "501a978e-3a3e-4060-b3be-1cf2bd4b1a38"),
-         Base.Random.UUID( "b3ba141a-a776-48e4-9fae-a28ea8571f58")]
+uuids = [Base.UUID( "5a2cbea3-e8c6-428b-b525-21239370dd55"),
+         Base.UUID( "d1dc64fa-da79-444b-9fa4-d4412f427289"),
+         Base.UUID( "501a978e-3a3e-4060-b3be-1cf2bd4b1a38"),
+         Base.UUID( "b3ba141a-a776-48e4-9fae-a28ea8571f58")]
 
 uris = [Transit.TURI("http://example.com"),
         Transit.TURI("ftp://example.com"),

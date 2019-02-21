@@ -7,6 +7,7 @@ import Base
 using DataStructures
 using URIParser
 using Decimals
+using Dates
 
 export parse, write,  # intended public use
        Decoder, Encoder, decode, encode  # used by tests

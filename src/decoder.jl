@@ -1,4 +1,6 @@
-mutable struct Decoder
+using Base64
+
+struct Decoder
     decoderFunctions::Dict{AbstractString,Function}
 
     Decoder() = new(Dict{AbstractString,Function}(
@@ -13,7 +15,7 @@ mutable struct Decoder
                         "f"  => (x -> decimal(lowercase(x))),
                         "r"  => (x -> TURI(x)),
                         "n"  => (x -> Base.parse(BigInt, x)),
-                        "u"  => (x -> Base.Random.UUID(x)), # only string case so far
+                        "u"  => (x -> Base.UUID(x)), # only string case so far
                         "t"  => parsedatetime,
                         "m"  => (x -> Dates.unix2datetime(Base.parse(Float64, x) / 1000.)), # maybe not sufficient
                         "z"  => (x -> if (x == "NaN")
@@ -108,13 +110,13 @@ function decode_value(e::Decoder, s::AbstractString, cache::Cache, as_map_key::B
         write!(cache, s)
     end
 
-    if !startswith(s, ESC)
+    if !multi_startswith(s, ESC)
         s
-    elseif startswith(s, TAG)
+    elseif multi_startswith(s, TAG)
         Tag(s[3:end])
-    elseif startswith(s, ESC_ESC) ||  startswith(s, ESC_SUB) || startswith(s, ESC_RES)
+    elseif multi_startswith(s, ESC_ESC) ||  multi_startswith(s, ESC_SUB) || multi_startswith(s, ESC_RES)
         s[2:end]
-    elseif startswith(s, ESC)
+    elseif multi_startswith(s, ESC)
         #2:2 is necessary to get str instead of char
         tag = s[2:2]
         if haskey(e.decoderFunctions, tag)

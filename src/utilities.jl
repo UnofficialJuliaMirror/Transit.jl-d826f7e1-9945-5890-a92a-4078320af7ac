@@ -1,8 +1,6 @@
-function startswith(str::AbstractString, pats...)
+function multi_startswith(str::AbstractString, pats...)
     for pat in pats
-        if start(search(str, pat)) == 1
-            return true
-        end
+        startswith(str, pat) && return true
     end
     false
 end

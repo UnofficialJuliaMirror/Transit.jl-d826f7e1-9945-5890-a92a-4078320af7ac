@@ -1,6 +1,4 @@
-module TestEncoder
-
-using Base.Test
+using Test
 using Transit
 using JSON
 
@@ -10,11 +8,10 @@ import DataStructures.OrderedDict
 # back in the resulting JSON. Not a round trip, since
 # we are just reading back in the raw JSON.
 function square_trip(x, verbose=false)
-    buf = IOBuffer()
-    e = Encoder(buf, verbose)
-    encode(e, x, false)
-    s = takebuf_string(buf)
-    #println(s)
+    s = sprint() do io
+        e = Encoder(io, verbose)
+        encode(e, x, false)
+    end
     JSON.parse(s)
 end
 
@@ -39,4 +36,3 @@ symbols = [Transit.TSymbol("hello"), Transit.TSymbol("hello"), Transit.TSymbol("
 @test square_trip([:aaaa, :bbbb, :aaaa, :bbbb], true) == ["~:aaaa", "~:bbbb", "~:aaaa", "~:bbbb"]
 
 @test square_trip(Dict([("aaa", 11), ("bbb", 22)]), true) == Dict([("aaa", 11), ("bbb", 22)])
-end

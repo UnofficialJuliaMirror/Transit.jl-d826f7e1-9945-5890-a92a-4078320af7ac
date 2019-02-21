@@ -4,9 +4,5 @@ function write(io::IO, x::Any, verbose=false)
 end
 
 function to_transit(x::Any, verbose=false)
-    let buf = IOBuffer()
-        write(buf, x, verbose)
-        s = takebuf_string(buf)
-	s
-    end
+    sprint(io-> write(io, x, verbose))
 end

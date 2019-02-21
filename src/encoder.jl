@@ -64,7 +64,7 @@ function encode_quoted(e::Encoder, x::Any)
 end
 
 function encode_value(e::Encoder, s::AbstractString, askey::Bool)
-    if startswith(s, "~") || startswith(s, "^")
+    if multi_startswith(s, "~") || multi_startswith(s, "^")
         emit(e.emitter, "~$s", askey)
     else
         emit(e.emitter, s, askey)
@@ -101,12 +101,12 @@ function encode_value(e::Encoder, u::TURI, askey::Bool)
     emit(e.emitter, "~r$s", askey)
 end
 
-function encode_value(e::Encoder, u::Base.Random.UUID, askey::Bool)
+function encode_value(e::Encoder, u::Base.UUID, askey::Bool)
     s = string(u)
     emit(e.emitter, "~u$s", askey)
 end
 
-function encode_value(e::Encoder, x::Void, askey::Bool)
+function encode_value(e::Encoder, x::Nothing, askey::Bool)
     emit_null(e.emitter, askey)
 end
 
@@ -194,7 +194,7 @@ function encodes_to_string(e::Encoder, x::AbstractArray)
 end
 
 function encode_value(e::Encoder, r::Rational, askey::Bool)
-    encode_tagged_enumerable(e, "#ratio", enumerate([num(r), den(r)]))
+    encode_tagged_enumerable(e, "#ratio", enumerate([numerator(r), denominator(r)]))
 end
 
 function encodes_to_string(e::Encoder, x::Rational)
