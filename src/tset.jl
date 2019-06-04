@@ -22,11 +22,15 @@ end
 in(x, s::TSet) = haskey(s.dict, (x, typeof(x)))
 ==(s::TSet, t::TSet) = ==(s.dict, t.dict)
 length(s::TSet) = length(s.dict)
-start(s::TSet) = start(s.dict)
-function next(s::TSet, x::Any)
-    nextdict = next(s.dict, x)
-    return (nextdict[1][2], nextdict[2])
+#iterate(s::TSet) = iterate(s.dict)
+function iterate(s::TSet)
+    iterate(s.dict)
 end
+
+#function next(s::TSet, x::Any)
+#    nextdict = next(s.dict, x)
+#    return (nextdict[1][2], nextdict[2])
+#end
 
 done(s::TSet, state::Any) = done(s.dict, state)
 enumerate(s::TSet) = enumerate(values(s.dict))
@@ -38,7 +42,7 @@ print(io::IO, s::TSet) = print(io, string(s))
 const hashtset_seed = UInt === UInt64 ? 0x852ada37cfe8e0ce : 0xcfe8e0ce
 function hash(s::TSet, h::UInt)
     h = hash(hashtset_seed, h)
-    for x in s
+    for x in s.dict
         h ⊻= hash(x)
     end
     return h

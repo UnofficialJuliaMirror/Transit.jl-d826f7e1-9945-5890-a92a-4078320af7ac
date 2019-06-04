@@ -1,6 +1,6 @@
 module TestTSet
 
-using Base.Test
+using Test
 using Transit
 
 

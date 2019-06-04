@@ -32,7 +32,7 @@ Transit will read or write data using any IO interface in Julia that is supporte
 by the JSON package. To write:
 
 ```julia
-Transit.write(STDOUT, [123, "hello world", :value, 0, nothing])
+Transit.write(stdout, [123, "hello world", :value, 0, nothing])
 # [123,"hello world","~:value",0,null]
 ```
 

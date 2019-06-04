@@ -1,7 +1,9 @@
 using Test
 using DataStructures
+using Printf
 
 import JSON
+import Dates
 import Transit
 import Transit.TSymbol
 import Transit.TSet
@@ -86,7 +88,7 @@ powers_two =
    18446744073709551616, 36893488147419103232]
 
 
-interesting_ints = foldl(vcat, [], map(x-> Array(range_centered_on(x, 2)), powers_two))
+interesting_ints = vcat(map(x-> Array(range_centered_on(x, 2)), powers_two)...)
 
 uuids = [Base.UUID( "5a2cbea3-e8c6-428b-b525-21239370dd55"),
          Base.UUID( "d1dc64fa-da79-444b-9fa4-d4412f427289"),
@@ -368,7 +370,7 @@ function findsame(x, col)
 end
 
 function test_reading(e::Exemplar)
-  path = "../transit-format/examples/0.8/simple/$(e.file_name).json"
+  path = "../../transit-format/examples/0.8/simple/$(e.file_name).json"
   actual = Transit.parse(open(path))
   if !issame(e.value, actual)
       println("\nREAD: $(e.file_name): Expected:\n$(e.value)\nBut got:\n$actual")
@@ -390,5 +392,3 @@ function test_exemplars()
 end
 
 @test test_exemplars()
-
-end
